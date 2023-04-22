@@ -37,13 +37,13 @@ If the `commission-rate` is set above 5% creating a validator succeeds.
 1. Query the list of validators and confirm there is currently one validator `fury_val`
 
 ```
-furynoded query staking validators
+furynd query staking validators
 ```
 
 2. Create a `akasha_val` validator:
 
 ```
-furynoded tx staking create-validator \
+furynd tx staking create-validator \
   --amount=92000000000000000000000stake \
   --pubkey='{"@type":"/cosmos.crypto.ed25519.PubKey","key":"+uo5x4+nFiCBt2MuhVwT5XeMfj6ttkjY/JC6WyHb+rE="}' \
   --moniker="akasha_val" \
@@ -58,7 +58,7 @@ furynoded tx staking create-validator \
   -y
 ```
 
-NOTE: The pubkey used in this example was found by running the `furynoded tendermint show-validator` command
+NOTE: The pubkey used in this example was found by running the `furynd tendermint show-validator` command
 on a different localnet instance.
 
 NOTE: Each validator must have a unique public key.
@@ -66,7 +66,7 @@ NOTE: Each validator must have a unique public key.
 2. Query the list of validators and confirm that `akasha_val` has been added and there are now two validators:
 
 ```
-furynoded query staking validators
+furynd query staking validators
 ```
 
 ### Failure
@@ -76,7 +76,7 @@ Attempting to create a validator with a `commission-rate` below 5% fails (even i
 1. Attempt to create an a validator but with a 3% commission rate (this would have succeeded if the commission-rate had been set > 5%):
 
 ```
-furynoded tx staking create-validator \
+furynd tx staking create-validator \
   --amount=92000000000000000000000stake \
   --pubkey='{"@type":"/cosmos.crypto.ed25519.PubKey","key":"/7LUsFhIdP0jj36wToOwY3zWC75YXxVd1vxp7YAc1Gs="}' \
   --moniker="alice_fail_val" \
@@ -104,7 +104,7 @@ If editing the `commission-rate` to a value above 5% (by less than commission-ma
 1. The commission rate can only be updated once within 24hrs, so wait 24 hrs then edit the `akasha_val` validator to set the commission-rate to 7%. NOTE: there doesn't seem to be a way to shorten the wait here, the 24hr check is hardcoded into the sdk, see https://github.com/cosmos/cosmos-sdk/blob/3f8596c1955e40ef30e4abcd06f2237d132db3a9/x/staking/types/commission.go#L85:
 
 ```
-furynoded tx staking edit-validator \
+furynd tx staking edit-validator \
   --from=akasha \
   --commission-rate="0.07" \
   --chain-id=localnet \
@@ -116,7 +116,7 @@ furynoded tx staking edit-validator \
 2. Query the validators and observe the `akasha_val` validator's `commission-rate` is now 7%
 
 ```
-furynoded query staking validators --output=json  | jq '.validators[] | select(.description.moniker=="akasha_val").commission.commission_rates.rate'
+furynd query staking validators --output=json  | jq '.validators[] | select(.description.moniker=="akasha_val").commission.commission_rates.rate'
 ```
 
 ### Failure
@@ -124,7 +124,7 @@ furynoded query staking validators --output=json  | jq '.validators[] | select(.
 1. Attempt to set the commission to 3%:
 
 ```
-furynoded tx staking edit-validator \
+furynd tx staking edit-validator \
   --from=akasha \
   --commission-rate="0.03" \
   --chain-id=localnet \
@@ -154,7 +154,7 @@ NOTE: The commission-rates of the validator could be permanently set to 3% and 4
 however causes the chain to fail to start on newer versions of the code which have the new min-commission feature.
 
 ```
-sed -i 's/furynoded gentx.*/furynoded gentx fury 1000000000000000000000000stake --chain-id=localnet --keyring-backend=test --commission-max-rate=0.04 --commission-rate=0.03/g' scripts/init.sh
+sed -i 's/furynd gentx.*/furynd gentx fury 1000000000000000000000000stake --chain-id=localnet --keyring-backend=test --commission-max-rate=0.04 --commission-rate=0.03/g' scripts/init.sh
 ```
 
 3. Initialize the chain
@@ -166,7 +166,7 @@ make init
 4. Decrease the governance voting period time before first start:
 
 ```
-echo "$(jq '.app_state.gov.voting_params.voting_period = "60s"' $HOME/.furynoded/config/genesis.json)" > $HOME/.furynoded/config/genesis.json
+echo "$(jq '.app_state.gov.voting_params.voting_period = "60s"' $HOME/.furynd/config/genesis.json)" > $HOME/.furynd/config/genesis.json
 ```
 
 5. Start the chain
@@ -178,13 +178,13 @@ make run
 6. Query the commission and observe that the rate is 3% and the max is 4%
 
 ```
-furynoded query staking validators --output=json | jq .validators[0].commission.commission_rates
+furynd query staking validators --output=json | jq .validators[0].commission.commission_rates
 ```
 
 7. Raise an upgrade proposal:
 
 ```
-furynoded tx gov submit-proposal software-upgrade 0.15.0 \
+furynd tx gov submit-proposal software-upgrade 0.15.0 \
   --from fury \
   --deposit 10000000000000000000stake \
   --upgrade-height 30 \
@@ -201,7 +201,7 @@ furynoded tx gov submit-proposal software-upgrade 0.15.0 \
 8. Vote on proposal:
 
 ```
-furynoded tx gov vote 1 yes --from fury --chain-id localnet --keyring-backend test -y --broadcast-mode block
+furynd tx gov vote 1 yes --from fury --chain-id localnet --keyring-backend test -y --broadcast-mode block
 ```
 
 The node will have a consensus failure when it reaches the `upgrade-height` set in the upgrade proposal.
@@ -223,7 +223,7 @@ make run
 11. Query the commission and observe that the rate is 5% and the max is 5%:
 
 ```
-furynoded query staking validators --output=json | jq .validators[0].commission.commission_rates
+furynd query staking validators --output=json | jq .validators[0].commission.commission_rates
 ```
 
 Repeating the above steps but with `commission-rate` initiated to 10% and `commission-max` initiated to 20% will show no
@@ -264,13 +264,13 @@ make run
 2. Confirm that there's one validator, `fury_val`, with 1000000000000000000000000 tokens:
 
 ```
-furynoded query staking validators
+furynd query staking validators
 ```
 
 3. Create a second validator with 62000000000000000000000 tokens, this will give it ~5.838% of the voting power:
 
 ```
-furynoded tx staking create-validator \
+furynd tx staking create-validator \
   --amount=62000000000000000000000stake \
   --pubkey='{"@type":"/cosmos.crypto.ed25519.PubKey","key":"+uo5x4+nFiCBt2MuhVwT5XeMfj6ttkjY/JC6WyHb+rE="}' \
   --moniker="akasha_val" \
@@ -288,7 +288,7 @@ furynoded tx staking create-validator \
 4. There should now be two validators:
 
 ```
-furynoded query staking validators
+furynd query staking validators
 ```
 
 ### Failure - Current (and projected) voting power too big
@@ -298,7 +298,7 @@ of (1000000000000000000000000 + 100) / (1000000000000000000000000 + 620000000000
 the exact voting power here might vary as `fury_val` earns rewards and `akasha_val` gets slashed:
 
 ```
-furynoded tx staking delegate furyvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna 100stake \
+furynd tx staking delegate furyvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna 100stake \
   --from fury \
   --keyring-backend test \
   --chain-id localnet \
@@ -316,7 +316,7 @@ of (92000000000000000000000 + 100000000000000000000000) / (920000000000000000000
 the exact voting power here might vary as `fury_val` earns rewards and `akasha_val` gets slashed::
 
 ```
-furynoded tx staking delegate furyvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy 100000000000000000000000stake \
+furynd tx staking delegate furyvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy 100000000000000000000000stake \
   --from fury \
   --keyring-backend test \
   --chain-id localnet \
@@ -334,13 +334,13 @@ vary if `akasha_val` has already been slashed:
 
 
 ```
-furynoded query staking validators --output=json  | jq '.validators[] | select(.description.moniker=="akasha_val").tokens'
+furynd query staking validators --output=json  | jq '.validators[] | select(.description.moniker=="akasha_val").tokens'
 ```
 
 2. Delegate to `akasha_val`
 
 ```
-furynoded tx staking delegate furyvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy 100stake \
+furynd tx staking delegate furyvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy 100stake \
   --from fury \
   --keyring-backend test \
   --chain-id localnet \
@@ -352,7 +352,7 @@ vary if `akasha_val` has already been slashed:
 
 
 ```
-furynoded query staking validators --output=json  | jq '.validators[] | select(.description.moniker=="akasha_val").tokens'
+furynd query staking validators --output=json  | jq '.validators[] | select(.description.moniker=="akasha_val").tokens'
 ```
 
 ### Redelegate
@@ -367,13 +367,13 @@ make run
 2. Confirm that there's one validator, `fury_val`, with 1000000000000000000000000 tokens:
 
 ```
-furynoded query staking validators
+furynd query staking validators
 ```
 
 3. Create a second validator with 62000000000000000000000 tokens, this will give it ~5.838% of the voting power:
 
 ```
-furynoded tx staking create-validator \
+furynd tx staking create-validator \
   --amount=62000000000000000000000stake \
   --pubkey='{"@type":"/cosmos.crypto.ed25519.PubKey","key":"+uo5x4+nFiCBt2MuhVwT5XeMfj6ttkjY/JC6WyHb+rE="}' \
   --moniker="akasha_val" \
@@ -391,7 +391,7 @@ furynoded tx staking create-validator \
 4. There should now be two validators:
 
 ```
-furynoded query staking validators
+furynd query staking validators
 ```
 
 ### Failure - Current (and projected) voting power too big
@@ -401,7 +401,7 @@ furynoded query staking validators
 the exact voting power here might vary as `fury_val` earns rewards and `akasha_val` gets slashed:
 
 ```
-furynoded tx staking redelegate furyvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy furyvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna 100stake \
+furynd tx staking redelegate furyvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy furyvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna 100stake \
   --from akasha \
   --keyring-backend test \
   --chain-id localnet \
@@ -419,7 +419,7 @@ of (92000000000000000000000 + 100000000000000000000000) / (920000000000000000000
 the exact voting power here might vary as `fury_val` earns rewards and `akasha_val` gets slashed:
 
 ```
-furynoded tx staking redelegate furyvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna furyvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy 100000000000000000000000stake \
+furynd tx staking redelegate furyvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna furyvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy 100000000000000000000000stake \
   --from fury \
   --keyring-backend test \
   --chain-id localnet \
@@ -436,13 +436,13 @@ Which fails with the message:
 vary if `akasha_val` has already been slashed:
 
 ```
-furynoded query staking validators --output=json  | jq '.validators[] | select(.description.moniker=="akasha_val").tokens'
+furynd query staking validators --output=json  | jq '.validators[] | select(.description.moniker=="akasha_val").tokens'
 ```
 
 2. Rdelegate to `akasha_val` from `fury_val`
 
 ```
-furynoded tx staking redelegate furyvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna furyvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy 100stake \
+furynd tx staking redelegate furyvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsqna furyvaloper1l7hypmqk2yc334vc6vmdwzp5sdefygj250dmpy 100stake \
   --from fury \
   --keyring-backend test \
   --chain-id localnet \
@@ -454,5 +454,5 @@ furynoded tx staking redelegate furyvaloper1syavy2npfyt9tcncdtsdzf7kny9lh777dzsq
 vary if `akasha_val` has already been slashed:
 
 ```
-furynoded query staking validators --output=json  | jq '.validators[] | select(.description.moniker=="akasha_val").tokens'
+furynd query staking validators --output=json  | jq '.validators[] | select(.description.moniker=="akasha_val").tokens'
 ```

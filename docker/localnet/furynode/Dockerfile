@@ -25,5 +25,5 @@ EXPOSE 1317
 EXPOSE 26656
 EXPOSE 26657
 
-COPY --from=build /go/bin/furynoded /usr/bin/furynoded
+COPY --from=build /go/bin/furynd /usr/bin/furynd
 COPY --from=build /go/bin/furygen /usr/bin/furygen

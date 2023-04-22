@@ -6,7 +6,7 @@
 
 TOKEN_REGISTRY_ADMIN_ADDRESS="fury1tpypxpppcf5lea47vcvgy09675nllmcucxydvu"
 
-furynoded tx tokenregistry register ./$FURYCHAIN_ID/$2.json \
+furynd tx tokenregistry register ./$FURYCHAIN_ID/$2.json \
   --node $FURY_NODE \
   --chain-id $FURYCHAIN_ID \
   --from $TOKEN_REGISTRY_ADMIN_ADDRESS \

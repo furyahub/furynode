@@ -2,6 +2,6 @@
 
 set -x
 
-furynoded q clp pool cusdt \
+furynd q clp pool cusdt \
   --node ${FURYNODE_NODE} \
   --chain-id $FURYNODE_CHAIN_ID

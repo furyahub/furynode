@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from $FURY_ACT \
   --keyring-backend test \
   --symbol cusdt \

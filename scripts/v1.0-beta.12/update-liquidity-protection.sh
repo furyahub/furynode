@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-furynoded tx clp liquidity-protection-params --isActive=true \
+furynd tx clp liquidity-protection-params --isActive=true \
 	--maxFuryLiquidityThreshold=43815115800 \
   --maxFuryLiquidityThresholdAsset=cusdc \
   --epochLength=14400 \

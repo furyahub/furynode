@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx margin open \
+furynd tx margin open \
   --from $FURY_ACT \
   --keyring-backend test \
   --borrow_asset cusdc \

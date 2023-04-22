@@ -2,19 +2,19 @@
 
 set -x
 
-ACCOUNT_NUMBER=$(furynoded q auth account $ADMIN_ADDRESS \
+ACCOUNT_NUMBER=$(furynd q auth account $ADMIN_ADDRESS \
     --node ${FURYNODE_NODE} \
     --chain-id $FURYNODE_CHAIN_ID \
     --output json \
     | jq -r ".account_number")
-SEQUENCE=$(furynoded q auth account $ADMIN_ADDRESS \
+SEQUENCE=$(furynd q auth account $ADMIN_ADDRESS \
   --node ${FURYNODE_NODE} \
   --chain-id $FURYNODE_CHAIN_ID \
   --output json \
   | jq -r ".sequence")
 for i in {0..12244}; do
   echo "tx ${i}"
-  furynoded tx clp add_liquidity \
+  furynd tx clp add_liquidity \
     --from=$FURY_ACT \
     --keyring-backend=test \
     --externalAmount=${EXTERNAL_AMOUNT} \

@@ -70,19 +70,19 @@ This record is also stored in the keeper for historical records .
 #input.json  : list of funding addresses  -  Input address must be part of the multisig key
 #output.json : list of airdrop receivers.
 
-furynoded tx dispensation create mkey ar1 input.json output.json --gas 200064128 --generate-only >> offlinetx.json
+furynd tx dispensation create mkey ar1 input.json output.json --gas 200064128 --generate-only >> offlinetx.json
 
 #First user signs
-furynoded tx sign --multisig $(furynoded keys show mkey -a) --from $(furynoded keys show fury -a)  offlinetx.json >> sig1.json
+furynd tx sign --multisig $(furynd keys show mkey -a) --from $(furynd keys show fury -a)  offlinetx.json >> sig1.json
 
 #Second user signs
-furynoded tx sign --multisig $(furynoded keys show mkey -a) --from $(furynoded keys show akasha -a)  offlinetx.json >> sig2.json
+furynd tx sign --multisig $(furynd keys show mkey -a) --from $(furynd keys show akasha -a)  offlinetx.json >> sig2.json
 
 #Multisign created from the above signatures
-furynoded tx multisign offlinetx.json mkey sig1.json sig2.json >> signedtx.json
+furynd tx multisign offlinetx.json mkey sig1.json sig2.json >> signedtx.json
 
 #transaction broadcast , distribution happens
-furynoded tx broadcast signedtx.json
+furynd tx broadcast signedtx.json
 ```
 
 ### Events Emitted 
@@ -147,13 +147,13 @@ Transfer events are emitted for each transfer . There are two type of transfers 
 ### Queries supported
 ```shell
 #Query all distributions
-furynoded q dispensation distributions-all
+furynd q dispensation distributions-all
 #Query all distribution records by distribution name 
-furynoded q dispensation records-by-name-all ar1
+furynd q dispensation records-by-name-all ar1
 #Query pending distribution records by distribution name 
-furynoded q dispensation records-by-name-pending ar1
+furynd q dispensation records-by-name-pending ar1
 #Query completed distribution records by distribution name
-furynoded q dispensation records-by-name-completed ar1
+furynd q dispensation records-by-name-completed ar1
 #Query distribution records by address
-furynoded q dispensation records-by-addr fury1cp23ye3h49nl5ty35vewrtvsgwnuczt03jwg00
+furynd q dispensation records-by-addr fury1cp23ye3h49nl5ty35vewrtvsgwnuczt03jwg00
 ```

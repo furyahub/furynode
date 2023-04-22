@@ -14,7 +14,7 @@ from test_utilities import get_furynet_addr_balance, advance_n_ethereum_blocks, 
     get_eth_balance, send_from_furynet_to_ethereum, wait_for_eth_balance, \
     wait_for_ethereum_block_number, send_from_furynet_to_furynet, wait_for_fury_account, \
     get_shell_output_json, EthereumToFurynetTransferRequest, FurynetcliCredentials, RequestAndCredentials, \
-    furynoded_binary
+    furynd_binary
 
 default_timeout_for_ganache = 160
 
@@ -48,7 +48,7 @@ def transfer_ethereum_to_furynet(transfer_request: EthereumToFurynetTransferRequ
     try:
         furynet_starting_balance = get_furynet_addr_balance(
             transfer_request.furynet_address,
-            transfer_request.furynoded_node,
+            transfer_request.furynd_node,
             transfer_request.furynet_symbol
         )
     except:
@@ -83,7 +83,7 @@ def transfer_ethereum_to_furynet(transfer_request: EthereumToFurynetTransferRequ
     try:
         furynet_balance_before_required_elapsed_blocks = get_furynet_addr_balance(
             transfer_request.furynet_address,
-            transfer_request.furynoded_node,
+            transfer_request.furynd_node,
             transfer_request.furynet_symbol
         )
     except:
@@ -113,14 +113,14 @@ def transfer_ethereum_to_furynet(transfer_request: EthereumToFurynetTransferRequ
     logging.debug(f"wait for account {transfer_request.furynet_address}")
     wait_for_fury_account(
         fury_addr=transfer_request.furynet_address,
-        furynetcli_node=transfer_request.furynoded_node,
+        furynetcli_node=transfer_request.furynd_node,
         max_seconds=max_seconds
     )
 
     wait_for_furynet_addr_balance(
         furynet_address=transfer_request.furynet_address,
         symbol=transfer_request.furynet_symbol,
-        furynetcli_node=transfer_request.furynoded_node,
+        furynetcli_node=transfer_request.furynd_node,
         target_balance=target_balance,
         max_seconds=max_seconds,
         debug_prefix=f"transfer_ethereum_to_furynet waiting for balance {transfer_request}"
@@ -148,7 +148,7 @@ def transfer_furynet_to_ethereum(
 
     furynet_starting_balance = get_furynet_addr_balance(
         transfer_request.furynet_address,
-        transfer_request.furynoded_node,
+        transfer_request.furynd_node,
         transfer_request.furynet_symbol
     )
 
@@ -173,7 +173,7 @@ def transfer_furynet_to_ethereum(
 
     furynet_ending_balance = get_furynet_addr_balance(
         transfer_request.furynet_address,
-        transfer_request.furynoded_node,
+        transfer_request.furynd_node,
         transfer_request.furynet_symbol
     )
 
@@ -197,7 +197,7 @@ def transfer_furynet_to_furynet(
     try:
         furynet_starting_balance = get_furynet_addr_balance(
             transfer_request.furynet_destination_address,
-            transfer_request.furynoded_node,
+            transfer_request.furynd_node,
             transfer_request.furynet_symbol
         )
     except Exception as e:
@@ -217,14 +217,14 @@ def transfer_furynet_to_furynet(
     target_balance = transfer_request.amount + furynet_starting_balance
     wait_for_fury_account(
         fury_addr=transfer_request.furynet_destination_address,
-        furynetcli_node=transfer_request.furynoded_node,
+        furynetcli_node=transfer_request.furynd_node,
         max_seconds=max_seconds
     )
     wait_for_furynet_addr_balance(
         furynet_address=transfer_request.furynet_destination_address,
         symbol=transfer_request.furynet_symbol,
         target_balance=target_balance,
-        furynetcli_node=transfer_request.furynoded_node,
+        furynetcli_node=transfer_request.furynd_node,
         max_seconds=max_seconds,
         debug_prefix=f"transfer_furynet_to_furynet {transfer_request}"
     )
@@ -335,7 +335,7 @@ def transfer_argument_parser() -> argparse.ArgumentParser:
         required=True
     )
     parser.add_argument(
-        '--furynoded_node',
+        '--furynd_node',
         type=str,
         nargs=1,
         default="tcp://localhost:26657",
@@ -364,10 +364,10 @@ def add_credentials_arguments(parser: argparse.ArgumentParser) -> argparse.Argum
         type=str,
         nargs=1,
         default=[""],
-        help="--from argument for furynoded"
+        help="--from argument for furynd"
     )
     parser.add_argument(
-        '--furynoded_homedir',
+        '--furynd_homedir',
         type=str,
         nargs=1,
         required=True,
@@ -408,7 +408,7 @@ def process_args(cmdline: List[str]) -> RequestAndCredentials:
         keyring_passphrase=os.environ.get(args.keyring_passphrase_env_var[0]),
         from_key=args.from_key[0],
         keyring_backend=args.keyring_backend[0],
-        furynoded_homedir=args.furynoded_homedir[0],
+        furynd_homedir=args.furynd_homedir[0],
     )
 
     return RequestAndCredentials(transfer_request, credentials, args)
@@ -423,5 +423,5 @@ def create_new_furyaddr(
     yes_subcmd = f"yes {keyring_passphrase} |" if keyring_passphrase else ""
     keyring_backend_subcmd = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
     # Note that keys-add prints to stderr
-    cmd = f"{yes_subcmd} {furynoded_binary} keys add {keyname} --home {credentials.furynoded_homedir} {keyring_backend_subcmd} --output json 2>&1"
+    cmd = f"{yes_subcmd} {furynd_binary} keys add {keyname} --home {credentials.furynd_homedir} {keyring_backend_subcmd} --output json 2>&1"
     return get_shell_output_json(cmd)

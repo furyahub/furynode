@@ -2,6 +2,6 @@
 
 set -x
 
-furynoded q margin params \
+furynd q margin params \
   --node ${FURYNODE_NODE} \
   --chain-id $FURYNODE_CHAIN_ID

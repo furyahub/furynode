@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx gov vote 2 yes \
+furynd tx gov vote 2 yes \
   --from ${FURY_ACT} \
   --keyring-backend test \
   --chain-id="${FURYNODE_CHAIN_ID}" \

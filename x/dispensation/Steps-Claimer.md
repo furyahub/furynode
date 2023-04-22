@@ -30,7 +30,7 @@ type CreateClaimReq struct {
 
 #### CLI
 ```shell
-furynoded tx dispensation claim LiquidityMining --from fury1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5 --yes --gas auto --gas-adjustment=1.5 --gas-prices 1.0fury --node tcp://rpc.furynet.finance:80 --chain-id furynet
+furynd tx dispensation claim LiquidityMining --from fury1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5 --yes --gas auto --gas-adjustment=1.5 --gas-prices 1.0fury --node tcp://rpc.furynet.finance:80 --chain-id furynet
 ```
 
 The relevant event 

@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp pmtp-rates \
+furynd tx clp pmtp-rates \
   --endPolicy=true \
   --from=$FURY_ACT \
   --keyring-backend=test \

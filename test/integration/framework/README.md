@@ -35,8 +35,8 @@ furytool run-env
 
 It will automatically install Python dependencies upon first use. This command will detect if you are on Peggy1 or
 Peggy2 branch, and will start local processes accordingly:
-- For Peggy1, it will run ganache-cli, furynoded and ebrelayer.
-- For Peggy2, it will run hardhat, furynoded and two instances of ebrelayer.
+- For Peggy1, it will run ganache-cli, furynd and ebrelayer.
+- For Peggy2, it will run hardhat, furynd and two instances of ebrelayer.
 
 If you want to use Python from virtual environment that includes all of the locally installed dependencies, use
 `test/integration/framework/venv/bin/python3`.

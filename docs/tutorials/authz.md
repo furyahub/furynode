@@ -6,22 +6,22 @@
 ## Steps to provide authorization
 1. Grant authorization to a particular address
 ```shell
-furynoded tx authz grant fury1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5 generic --msg-type=/furynode.clp.v1.MsgCreatePool --from=fury --keyring-backend=test --chain-id=localnet
+furynd tx authz grant fury1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5 generic --msg-type=/furynode.clp.v1.MsgCreatePool --from=fury --keyring-backend=test --chain-id=localnet
 
 ```
 In this case the granter is `fury` . This allows `fury1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5` to perform any TX of type `MsgCreatePool` on their behalf
 Query grants
 ```shell
-furynoded q authz grants fury1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd fury1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5 /furynode.clp.v1.MsgCreatePool
+furynd q authz grants fury1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd fury1l7hypmqk2yc334vc6vmdwzp5sdefygj2ad93p5 /furynode.clp.v1.MsgCreatePool
 ```
 2. Create tx
 ```shell
-furynoded tx clp create-pool --from fury1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd --symbol ceth --nativeAmount 1000000000000000000 --externalAmount 1000000000000000000  --yes --chain-id=localnet --keyring-backend=test --generate-only > tx.json
+furynd tx clp create-pool --from fury1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd --symbol ceth --nativeAmount 1000000000000000000 --externalAmount 1000000000000000000  --yes --chain-id=localnet --keyring-backend=test --generate-only > tx.json
 ```
 
 3. Sign and broadcast
 ```shell
- furynoded tx authz exec tx.json --from akasha --keyring-backend=test --chain-id=localnet
+ furynd tx authz exec tx.json --from akasha --keyring-backend=test --chain-id=localnet
 ```
 Logs from exec 
 ```json lines

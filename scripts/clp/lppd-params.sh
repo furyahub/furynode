@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp set-lppd-params \
+furynd tx clp set-lppd-params \
   --path lppd-params.json \
   --from $FURY_ACT \
   --keyring-backend test \

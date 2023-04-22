@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx margin dewhitelist fury1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd \
+furynd tx margin dewhitelist fury1syavy2npfyt9tcncdtsdzf7kny9lh777yqc2nd \
   --from $FURY_ACT \
   --keyring-backend test \
   --fees 100000000000000000fury \

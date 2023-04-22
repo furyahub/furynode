@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx margin close \
+furynd tx margin close \
   --from $FURY_ACT \
   --id 7 \
   --keyring-backend test \

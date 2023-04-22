@@ -9,7 +9,7 @@ def furynet_cli_credentials_for_test(key: str) -> FurynetcliCredentials:
         keyring_passphrase="",
         keyring_backend="test",
         from_key=key,
-        furynoded_homedir=f"""{get_required_env_var("HOME")}/.furynoded"""
+        furynd_homedir=f"""{get_required_env_var("HOME")}/.furynd"""
     )
 
 

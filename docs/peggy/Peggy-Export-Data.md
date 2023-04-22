@@ -5,9 +5,9 @@
  See the Peggy-Ceth-Account-Set.md in the same folder.
 
  ## Peggy Token List
- The list is up to date at the runtime of Furynoded. The new token will be added into the list after the prophecy completed.
+ The list is up to date at the runtime of Furynd. The new token will be added into the list after the prophecy completed.
 
  ## Export data into genesis
- furynoded export > genesis.json
+ furynd export > genesis.json
  
  the sample file of genesis.json can be seen in the same folder.

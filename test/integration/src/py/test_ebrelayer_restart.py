@@ -20,12 +20,12 @@ def test_ebrelayer_restart(
         base_transfer_request=basic_transfer_request,
         target_ceth_balance=10 ** 15
     )
-    balance = test_utilities.get_furynet_addr_balance(request.furynet_address, request.furynoded_node, "ceth")
+    balance = test_utilities.get_furynet_addr_balance(request.furynet_address, request.furynd_node, "ceth")
     logging.info("restart ebrelayer normally, leaving the last block db in place")
     test_utilities.start_ebrelayer()
     test_utilities.advance_n_ethereum_blocks(test_utilities.n_wait_blocks * 2, request.smart_contracts_dir)
     time.sleep(5)
-    assert balance == test_utilities.get_furynet_addr_balance(request.furynet_address, request.furynoded_node,
+    assert balance == test_utilities.get_furynet_addr_balance(request.furynet_address, request.furynd_node,
                                                                "ceth")
 
 
@@ -81,8 +81,8 @@ def test_ethereum_transactions_with_offline_relayer(
         # ebrelayer only reads blocks if there are new blocks generated
         test_utilities.advance_n_ethereum_blocks(test_utilities.n_wait_blocks, request.smart_contracts_dir)
     for a in new_addresses:
-        test_utilities.wait_for_fury_account(a, basic_transfer_request.furynoded_node, 90)
-        test_utilities.wait_for_furynet_addr_balance(a, "ceth", amount, basic_transfer_request.furynoded_node, 90)
+        test_utilities.wait_for_fury_account(a, basic_transfer_request.furynd_node, 90)
+        test_utilities.wait_for_furynet_addr_balance(a, "ceth", amount, basic_transfer_request.furynd_node, 90)
 
 
 @pytest.mark.usefixtures("ensure_relayer_restart")
@@ -123,7 +123,7 @@ def test_furynet_transactions_with_offline_relayer(
 
     for a in new_eth_addrs:
         request.ethereum_address = a["address"]
-        furynet_balance = test_utilities.get_furynet_addr_balance(request.furynet_address, request.furynoded_node,
+        furynet_balance = test_utilities.get_furynet_addr_balance(request.furynet_address, request.furynd_node,
                                                                     "ceth")
         logging.info(f"furynet balance is {furynet_balance}, request is {request}")
         test_utilities.send_from_furynet_to_ethereum(

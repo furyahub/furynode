@@ -29,7 +29,7 @@ make furydocker-sh     # gives you a shell in the running container
 ## Execute
 
 [start-integration-env.sh](./start-integration-env.sh) starts 
-furynoded and ganache.
+furynd and ganache.
 
 Run the tests in a container with:
 
@@ -62,7 +62,7 @@ test/integration/start-integration-env.sh
 ```
 # cd ~/workspace/furynode/test/integration 
 # source ./exampleenv.sh
-# furynoded q auth account --node tcp://44.241.55.154:26657 fury1pvnu2kh826vn8r0ttlgt82hsmfknvcnf7qmpvk
+# furynd q auth account --node tcp://44.241.55.154:26657 fury1pvnu2kh826vn8r0ttlgt82hsmfknvcnf7qmpvk
 # ...
 ```
 

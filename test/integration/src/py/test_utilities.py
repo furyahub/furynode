@@ -14,7 +14,7 @@ lock_gas_cost = 160000000000 * 393000
 highest_gas_cost = max(burn_gas_cost, lock_gas_cost)
 
 
-furynoded_binary = "furynoded"
+furynd_binary = "furynd"
 
 @dataclass
 class EthereumToFurynetTransferRequest:
@@ -35,7 +35,7 @@ class EthereumToFurynetTransferRequest:
     n_wait_blocks: int = n_wait_blocks
     bridgebank_address: str = ""
     bridgetoken_address: str = ""
-    furynoded_node: str = "tcp://localhost:26657"
+    furynd_node: str = "tcp://localhost:26657"
     solidity_json_path: str = ""
     # set to true if you want to fail if the balance changes before
     # the block waiting period has elapsed.  If you're runing
@@ -70,7 +70,7 @@ class FurynetcliCredentials:
     keyring_passphrase: str = None
     keyring_backend: str = "test"
     from_key: str = None
-    furynoded_homedir: str = None
+    furynd_homedir: str = None
 
     def printable_entries(self):
         return {**(self.__dict__), "keyring_passphrase": "** hidden **"}
@@ -125,7 +125,7 @@ cmdfile = open("/tmp/testcmds.txt", "w")
 
 def get_shell_output(command_line):
     cmdfile.write(command_line)
-    if furynoded_binary in command_line and not "q auth account" in command_line:
+    if furynd_binary in command_line and not "q auth account" in command_line:
         time.sleep(2)
     logging.debug(f"execute shell command:\n{command_line}")
     sub = subprocess.run(command_line, shell=True, capture_output=True)
@@ -189,7 +189,7 @@ def start_ebrelayer():
 
 # converts a key to a fury address.
 def get_user_account(user, network_password):
-    command_line = "yes " + network_password + f" | {furynoded_binary} keys show " + user + " -a"
+    command_line = "yes " + network_password + f" | {furynd_binary} keys show " + user + " -a"
     return get_shell_output(command_line)
 
 
@@ -263,9 +263,9 @@ def mint_tokens(transfer_request: EthereumToFurynetTransferRequest, operator_add
     return run_yarn_command(command_line)
 
 
-def get_furynet_addr_balance(furyaddress, furynoded_node, denom):
-    node = f"--node {furynoded_node}" if furynoded_node else ""
-    command_line = f"{furynoded_binary} query bank balances {node} {furyaddress} --output json --limit 100000000"
+def get_furynet_addr_balance(furyaddress, furynd_node, denom):
+    node = f"--node {furynd_node}" if furynd_node else ""
+    command_line = f"{furynd_binary} query bank balances {node} {furyaddress} --output json --limit 100000000"
     json_str = get_shell_output_json(command_line)
     coins = json_str["balances"]
     for coin in coins:
@@ -296,10 +296,10 @@ def wait_for_successful_command(command_line, max_seconds=80):
     )
 
 
-def get_transaction_result(tx_hash, furynoded_node, chain_id):
-    node = f"--node {furynoded_node}" if furynoded_node else ""
+def get_transaction_result(tx_hash, furynd_node, chain_id):
+    node = f"--node {furynd_node}" if furynd_node else ""
     chain_id_entry = f"--chain-id {chain_id}" if chain_id else ""
-    command_line = f"{furynoded_binary} q tx {node} {tx_hash} {chain_id_entry} --output json"
+    command_line = f"{furynd_binary} q tx {node} {tx_hash} {chain_id_entry} --output json"
     json_str = wait_for_successful_command(command_line, max_seconds=30)
     return json_str
 
@@ -360,7 +360,7 @@ def wait_for_furynet_addr_balance(
     )
 
 
-def detect_errors_in_furynoded_output(result):
+def detect_errors_in_furynd_output(result):
     result_lines = result.split("\n")
     for line in result_lines:
         line: str
@@ -376,12 +376,12 @@ def send_from_furynet_to_furynet_cmd(
     yes_entry = f"yes {credentials.keyring_passphrase} | " if credentials.keyring_passphrase else ""
     keyring_backend_entry = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
     chain_id_entry = f"--chain-id {transfer_request.chain_id}" if transfer_request.chain_id else ""
-    node = f"--node {transfer_request.furynoded_node}" if transfer_request.furynoded_node else ""
+    node = f"--node {transfer_request.furynd_node}" if transfer_request.furynd_node else ""
     furynet_fees_entry = f"--fees {transfer_request.furynet_fees}" if transfer_request.furynet_fees else ""  # Deprecated, see https://github.com/Furynet/furynode/pull/1802#discussion_r697403408
-    home_entry = f"--home {credentials.furynoded_homedir}" if credentials.furynoded_homedir else ""
+    home_entry = f"--home {credentials.furynd_homedir}" if credentials.furynd_homedir else ""
     cmd = " ".join([
         yes_entry,
-        f"{furynoded_binary} tx bank send",
+        f"{furynd_binary} tx bank send",
         transfer_request.furynet_address,
         transfer_request.furynet_destination_address,
         keyring_backend_entry,
@@ -402,9 +402,9 @@ def send_from_furynet_to_furynet(
 ):
     cmd = send_from_furynet_to_furynet_cmd(transfer_request, credentials)
     result = get_shell_output_json(cmd)
-    # detect_errors_in_furynoded_output(result)
+    # detect_errors_in_furynd_output(result)
     time.sleep(4)
-    # get_transaction_result(result["txhash"], transfer_request.furynoded_node, transfer_request.chain_id)
+    # get_transaction_result(result["txhash"], transfer_request.furynd_node, transfer_request.chain_id)
     return result
 
 
@@ -420,10 +420,10 @@ def send_from_furynet_to_ethereum_cmd(
     assert transfer_request.amount > 0
     yes_entry = f"yes {credentials.keyring_passphrase} | " if credentials.keyring_passphrase else ""
     keyring_backend_entry = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
-    node = f"--node {transfer_request.furynoded_node}" if transfer_request.furynoded_node else ""
+    node = f"--node {transfer_request.furynd_node}" if transfer_request.furynd_node else ""
     furynet_fees_entry = f"--fees {transfer_request.furynet_fees}" if transfer_request.furynet_fees else ""  # Deprecated, see https://github.com/Furynet/furynode/pull/1802#discussion_r697403408
     direction = "lock" if transfer_request.furynet_symbol == "fury" else "burn"
-    home_entry = f"--home {credentials.furynoded_homedir}" if credentials.furynoded_homedir else ""
+    home_entry = f"--home {credentials.furynd_homedir}" if credentials.furynd_homedir else ""
     from_entry = f"--from {credentials.from_key} " if credentials.from_key else ""
     if not transfer_request.ceth_amount:
         if direction == "lock":
@@ -431,7 +431,7 @@ def send_from_furynet_to_ethereum_cmd(
         else:
             ceth_charge = burn_gas_cost
     command_line = f"{yes_entry} " \
-                   f"{furynoded_binary} tx ethbridge {direction} {node} " \
+                   f"{furynd_binary} tx ethbridge {direction} {node} " \
                    f"{transfer_request.furynet_address} " \
                    f"{transfer_request.ethereum_address} " \
                    f"{int(transfer_request.amount):0} " \
@@ -451,7 +451,7 @@ def send_from_furynet_to_ethereum(transfer_request: EthereumToFurynetTransferReq
                                    credentials: FurynetcliCredentials):
     command_line = send_from_furynet_to_ethereum_cmd(transfer_request, credentials)
     result = get_shell_output(command_line)
-    detect_errors_in_furynoded_output(result)
+    detect_errors_in_furynd_output(result)
     return result
 
 
@@ -702,7 +702,7 @@ def update_ceth_receiver_account(
         credentials: FurynetcliCredentials
 ):
     cmd = build_furynet_command(
-        f"{furynoded_binary} tx ethbridge update_ceth_receiver_account -y {admin_account} {receiver_account}",
+        f"{furynd_binary} tx ethbridge update_ceth_receiver_account -y {admin_account} {receiver_account}",
         transfer_request=transfer_request,
         credentials=credentials
     )
@@ -718,7 +718,7 @@ def rescue_ceth(
         credentials: FurynetcliCredentials
 ):
     cmd = build_furynet_command(
-        f"{furynoded_binary} tx ethbridge rescue_ceth -y {admin_account} {receiver_account} {amount:d}",
+        f"{furynd_binary} tx ethbridge rescue_ceth -y {admin_account} {receiver_account} {amount:d}",
         transfer_request=transfer_request,
         credentials=credentials
     )
@@ -733,8 +733,8 @@ def build_furynet_command(
     yes_entry = f"yes {credentials.keyring_passphrase} | " if credentials.keyring_passphrase else ""
     keyring_backend_entry = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
     chain_id_entry = f"--chain-id {transfer_request.chain_id}" if transfer_request.chain_id else ""
-    node_entry = f"--node {transfer_request.furynoded_node}" if transfer_request.furynoded_node else ""
-    home_entry = f"--home {credentials.furynoded_homedir}" if credentials.furynoded_homedir else ""
+    node_entry = f"--node {transfer_request.furynd_node}" if transfer_request.furynd_node else ""
+    home_entry = f"--home {credentials.furynd_homedir}" if credentials.furynd_homedir else ""
     from_entry = f"--from {credentials.from_key} " if credentials.from_key else ""
     furynet_fees_entry = f"--fees {transfer_request.furynet_fees}" if transfer_request.furynet_fees else ""  # Deprecated, see https://github.com/Furynet/furynode/pull/1802#discussion_r697403408
     return " ".join([

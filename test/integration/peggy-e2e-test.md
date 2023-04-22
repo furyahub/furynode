@@ -1,6 +1,6 @@
 
 # end to end test
-## start truffle, furynoded and relayer
+## start truffle, furynd and relayer
 1. open a console
 cd smart-contracts
 yarn develop
@@ -8,7 +8,7 @@ yarn develop
 2. open other console 
 cd smart-contracts
 yarn migrate
-furynoded start
+furynd start
 
 1. open new console
 cd smart-contracts
@@ -20,38 +20,38 @@ yarn peggy:getTokenBalance  0x627306090abaB3A6e1400e9345bC60c78a8BEf57 eth
 2. check the ballance of contract before lock
 yarn peggy:getTokenBalance  0x2C2B9C9a4a25e24B174f26114e8926a9f2128FE4  eth
 3. check the user balance before lock
-furynoded query account $(furynoded keys show user2 -a)
+furynd query account $(furynd keys show user2 -a)
 
-yarn peggy:lock $(furynoded keys show user2 -a) 0x0000000000000000000000000000000000000000 1000000000000000000
+yarn peggy:lock $(furynd keys show user2 -a) 0x0000000000000000000000000000000000000000 1000000000000000000
 
 4. check the balance of operator before lock
 yarn peggy:getTokenBalance  0x627306090abaB3A6e1400e9345bC60c78a8BEf57 eth
 5. check the ballance of contract before lock
 yarn peggy:getTokenBalance  0x2C2B9C9a4a25e24B174f26114e8926a9f2128FE4  eth
 6. check the user2 balance before lock
-furynoded query account $(furynoded keys show user2 -a)
+furynd query account $(furynd keys show user2 -a)
 
 ### case 2: burn user2's eth in cosmos then asset to back to ethereum's validator account
 1. check the validator's balance before burn
 yarn peggy:getTokenBalance 0xf17f52151EbEF6C7334FAD080c5704D77216b732 eth
-furynoded query account $(furynoded keys show user2 -a)
+furynd query account $(furynd keys show user2 -a)
 
 2. send burn tx in cosmos
-furynoded tx ethbridge burn $(furynoded keys show user2 -a) 0xf17f52151EbEF6C7334FAD080c5704D77216b732 1000000000000000000 peggyeth --ethereum-chain-id=5777 --from=user2 --yes
+furynd tx ethbridge burn $(furynd keys show user2 -a) 0xf17f52151EbEF6C7334FAD080c5704D77216b732 1000000000000000000 peggyeth --ethereum-chain-id=5777 --from=user2 --yes
 
 3. check user2's account 
 yarn peggy:getTokenBalance 0xf17f52151EbEF6C7334FAD080c5704D77216b732 eth
-furynoded query account $(furynoded keys show user2 -a)
+furynd query account $(furynd keys show user2 -a)
 
 ### case 3: lock fury in cosmos then issue the token in ethereum
-furynoded tx ethbridge lock $(furynoded keys show user2 -a) 0xf17f52151EbEF6C7334FAD080c5704D77216b732 1 rwn  --ethereum-chain-id=5777 --from=user2 --yes
+furynd tx ethbridge lock $(furynd keys show user2 -a) 0xf17f52151EbEF6C7334FAD080c5704D77216b732 1 rwn  --ethereum-chain-id=5777 --from=user2 --yes
 
 1. check the balance of user2 peggyatom in ethereum
 yarn peggy:getTokenBalance 0xf17f52151EbEF6C7334FAD080c5704D77216b732  0x409Ba3dd291bb5D48D5B4404F5EFa207441F6CbA
-furynoded query account $(furynoded keys show user2 -a)
+furynd query account $(furynd keys show user2 -a)
 
 ### case 4: burn fury in ethereum and fury will be back to cosmos
-yarn peggy:burn $(furynoded keys show user2 -a) 0x409Ba3dd291bb5D48D5B4404F5EFa207441F6CbA 1
+yarn peggy:burn $(furynd keys show user2 -a) 0x409Ba3dd291bb5D48D5B4404F5EFa207441F6CbA 1
 1. check balance after burn 
 yarn peggy:getTokenBalance 0xf17f52151EbEF6C7334FAD080c5704D77216b732  0x409Ba3dd291bb5D48D5B4404F5EFa207441F6CbA
-furynoded query account $(furynoded keys show user2 -a)
+furynd query account $(furynd keys show user2 -a)

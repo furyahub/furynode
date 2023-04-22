@@ -2,10 +2,10 @@ create-pool:
 	./scripts/create_pool.sh
 
 show-pool:
-	furynoded q clp pool ceth
+	furynd q clp pool ceth
 
 show-params:
-	furynoded q clp params
+	furynd q clp params
 
 remove-liquidity:
 	./scripts/remove_liquidity.sh
@@ -20,7 +20,7 @@ submit-proposal:
 	./scripts/submit_proposal.sh
 
 view-proposal:
-	furynoded q gov proposal 1
+	furynd q gov proposal 1
 
 vote:
 	./scripts/vote.sh

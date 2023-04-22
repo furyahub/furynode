@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp add-liquidity \
+furynd tx clp add-liquidity \
   --from $FURY_ACT \
   --keyring-backend test \
   --symbol cusdt \

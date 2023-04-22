@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx margin whitelist $ADMIN_ADDRESS \
+furynd tx margin whitelist $ADMIN_ADDRESS \
   --from $ADMIN_KEY \
   --keyring-backend test \
   --fees 100000000000000000fury \

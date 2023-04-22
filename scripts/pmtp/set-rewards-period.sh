@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp reward-period \
+furynd tx clp reward-period \
   --path ./rewards.json \
   --from=$FURY_ACT \
   --keyring-backend=test \

@@ -31,7 +31,7 @@ import (
 )
 
 func buildRootCmd() *cobra.Command {
-	// see cmd/furynoded/cmd/root.go:37 ; we need to do the
+	// see cmd/furynd/cmd/root.go:37 ; we need to do the
 	// same thing in ebrelayer
 	encodingConfig := furyapp.MakeTestEncodingConfig()
 	initClientCtx := client.Context{}.

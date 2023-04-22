@@ -1,6 +1,6 @@
 # Asymmetric Liquidity Adds
 
-Furynoded does not currently support asymmetric liquidity adds. This document proposes a procedure
+Furynd does not currently support asymmetric liquidity adds. This document proposes a procedure
 which would allow asymmetric adds.
 
 ## Symmetric Adds
@@ -44,7 +44,7 @@ A - external asset pool depth (before adding liquidity)
 r - amount of native token added
 a - amount of external token added
 ```
-Currently furynoded blocks asymmetric adds. The following procedure is proposed to enable
+Currently furynd blocks asymmetric adds. The following procedure is proposed to enable
 asymmetric adds.
 
 ### Proposed method
@@ -143,7 +143,7 @@ Since the add liquidity process involves swapping then the Liquidity protection 
 ### Get Estimation of pool share
 
 ```bash
-furynoded query clp estimate-pool-share \
+furynd query clp estimate-pool-share \
   --externalAmount=0 \
   --nativeAmount=1000000000000000000 \
   --symbol ceth \

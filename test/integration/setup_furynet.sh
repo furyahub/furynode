@@ -6,7 +6,7 @@ set -e
 . $(dirname $0)/vagrantenv.sh
 . ${TEST_INTEGRATION_DIR}/shell_utilities.sh
 
-pkill furynoded || true
+pkill furynd || true
 pkill ebrelayer || true
 
 sleep 1
@@ -33,18 +33,18 @@ set_persistant_env_var VALIDATOR1_PASSWORD $(cat $NETDEF_JSON | jq -r '.[0].pass
 set_persistant_env_var VALIDATOR1_ADDR $(cat $NETDEF_JSON | jq -r '.[0].address') $envexportfile
 set_persistant_env_var MNEMONIC "$(cat $NETDEF_JSON | jq -r '.[0].mnemonic')" $envexportfile
 set_persistant_env_var CHAINDIR $NETWORKDIR/validators/$CHAINNET/$MONIKER $envexportfile
-set_persistant_env_var FURYNODED_LOG $datadir/logs/furynoded.log $envexportfile
+set_persistant_env_var FURYND_LOG $datadir/logs/furynd.log $envexportfile
 
 . $envexportfile
 
 # now we have to add the validator key to the test keyring so the tests can send fury from validator1
-echo "$MNEMONIC" | furynoded keys add $MONIKER --keyring-backend test --recover 
-valoper=$(furynoded keys show -a --bech val $MONIKER --home $CHAINDIR/.furynoded --keyring-backend test)
-furynoded add-genesis-validators $valoper --home $CHAINDIR/.furynoded
+echo "$MNEMONIC" | furynd keys add $MONIKER --keyring-backend test --recover 
+valoper=$(furynd keys show -a --bech val $MONIKER --home $CHAINDIR/.furynd --keyring-backend test)
+furynd add-genesis-validators $valoper --home $CHAINDIR/.furynd
 
 mkdir -p $datadir/logs
-nohup $TEST_INTEGRATION_DIR/furynet_start_daemon.sh < /dev/null > $FURYNODED_LOG 2>&1 &
+nohup $TEST_INTEGRATION_DIR/furynet_start_daemon.sh < /dev/null > $FURYND_LOG 2>&1 &
 # we don't have a great way to make sure furynet itself has started
 sleep 10
-set_persistant_env_var FURYNODED_PID $! $envexportfile
+set_persistant_env_var FURYND_PID $! $envexportfile
 bash $TEST_INTEGRATION_DIR/furynet_start_ebrelayer.sh

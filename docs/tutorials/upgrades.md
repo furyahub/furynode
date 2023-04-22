@@ -8,7 +8,7 @@ make init
 
 
 ```bash
-echo "$(jq '.app_state.gov.voting_params.voting_period = "60s"' $HOME/.furynoded/config/genesis.json)" > $HOME/.furynoded/config/genesis.json
+echo "$(jq '.app_state.gov.voting_params.voting_period = "60s"' $HOME/.furynd/config/genesis.json)" > $HOME/.furynd/config/genesis.json
 ```
 
 3. Start the chain:
@@ -20,14 +20,14 @@ make run
 4. List upgrade proposals:
 
 ```
-furynoded q gov proposals --chain-id localnet
+furynd q gov proposals --chain-id localnet
 ```
 
 5. Raise an upgrade proposal:
 
 
 ```bash
-furynoded tx gov submit-proposal software-upgrade plan_name \
+furynd tx gov submit-proposal software-upgrade plan_name \
   --from fury \
   --deposit 10000000000000000000stake \
   --upgrade-height 30 \
@@ -44,18 +44,18 @@ furynoded tx gov submit-proposal software-upgrade plan_name \
 6. Check deposits:
 
 ```
-furynoded q gov deposits 1
+furynd q gov deposits 1
 ```
 
 7. Vote on proposal:
 
 ```
-furynoded tx gov vote 1 yes --from fury --chain-id localnet --keyring-backend test -y --broadcast-mode block
+furynd tx gov vote 1 yes --from fury --chain-id localnet --keyring-backend test -y --broadcast-mode block
 ```
 
-The node will have a consensus failure when it reaches the "upgrade-height". Restarting the node will not be enough for the chain to continue a new furynoded release is required
+The node will have a consensus failure when it reaches the "upgrade-height". Restarting the node will not be enough for the chain to continue a new furynd release is required
 
-8. Make a new furynoded release:
+8. Make a new furynd release:
 
   i. Update "version" file content to "plan_name"
   ii. Update "app/setup_handlers.go" "releaseVersion" constant to "plan_name"

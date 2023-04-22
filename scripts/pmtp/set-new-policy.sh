@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp pmtp-params \
+furynd tx clp pmtp-params \
   --pmtp_start=31 \
   --pmtp_end=1030 \
   --epochLength=100 \

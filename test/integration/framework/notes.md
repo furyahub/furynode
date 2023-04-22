@@ -80,34 +80,34 @@ chain_id = "mychain" // Parameter
 
 // Generate account with name 'fury' in the local keyring
 mnemonic = generate_mnemonic()
-exec("echo $mnemonic | furynoded keys add --recover --keyring-backend test")
-fury_admin = exec("furynoded keys show fury -a --keyring-backend test") // fury1xxx...
+exec("echo $mnemonic | furynd keys add --recover --keyring-backend test")
+fury_admin = exec("furynd keys show fury -a --keyring-backend test") // fury1xxx...
 
 // Init the chain. This command creates files:
-// ~/.furynoded/config/node_key.json
-// ~/.furynoded/config/genesis.json
-// ~/.furynoded/config/priv_validator_key.json
-// ~/.furynoded/data/priv_validator_state.json
+// ~/.furynd/config/node_key.json
+// ~/.furynd/config/genesis.json
+// ~/.furynd/config/priv_validator_key.json
+// ~/.furynd/data/priv_validator_state.json
 // and prints some JSON (what?)
-exec("furynoded init {moniker} --chain-id {chain_id}")
+exec("furynd init {moniker} --chain-id {chain_id}")
 
 // Add Genesis Accounts
-exec("furynoded add-genesis-account {fury_admin} --keyring-backend test 999999000000000000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink")
+exec("furynd add-genesis-account {fury_admin} --keyring-backend test 999999000000000000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink")
 
 // Add Genesis CLP ADMIN fury
-exec("furynoded add-genesis-clp-admin ${fury_admin} --keyring-backend test")
+exec("furynd add-genesis-clp-admin ${fury_admin} --keyring-backend test")
 
 // Add Genesis CLP ADMIN fury
-exec("furynoded add-genesis-clp-admin ${fury_admin} --keyring-backend test")
+exec("furynd add-genesis-clp-admin ${fury_admin} --keyring-backend test")
 
 // Set Genesis whitelist admin ${FURY_WALLET}
-exec("furynoded set-genesis-whitelister-admin {fury_admin} --keyring-backend test")
+exec("furynd set-genesis-whitelister-admin {fury_admin} --keyring-backend test")
 
 // Fund account (Genesis TX stake)
-exec("furynoded gentx {fury_admin} 1000000000000000000000000stake --keyring-backend test --chain-id {chain_id}")
+exec("furynd gentx {fury_admin} 1000000000000000000000000stake --keyring-backend test --chain-id {chain_id}")
 
 // Generate token json
-furynoded q tokenregistry generate -o json \
+furynd q tokenregistry generate -o json \
  --token_base_denom=cosmos \
  --token_ibc_counterparty_chain_id=${GAIA_CHAIN_ID} \
    --token_ibc_channel_id=$GAIA_CHANNEL_ID \
@@ -123,7 +123,7 @@ furynoded q tokenregistry generate -o json \
 
 // Whitelist tokens
 // printf "registering cosmos... \n"
-furynoded tx tokenregistry register gaia.json \
+furynd tx tokenregistry register gaia.json \
  --node tcp://${FURYNODE_P2P_HOSTNAME}:26657 \
  --chain-id $FURYCHAIN_ID \
  --from $FURY_WALLET \
@@ -135,20 +135,20 @@ furynoded tx tokenregistry register gaia.json \
 // Deploy token registry
 // Registering Tokens...
 // Set Whitelist from denoms.json...
-furynoded set-gen-denom-whitelist DENOM.json
+furynd set-gen-denom-whitelist DENOM.json
 
 ## Peggy1 - integration tests
 
 // Parameters: validator moniker, validator mnemonic
 valicator1_moniker, validator1_address, validator1_password, validator1_mnemonic = exec("furygen create network ...")
 
-furynoded_keys_add(validator1_moniker, validator1_password) // Test keyring
+furynd_keys_add(validator1_moniker, validator1_password) // Test keyring
 valoper = get_val_address(validator1_moniker)
 
-exec("furynoded add-genesis-validators {valoper}")
-exec("furynoded add-geneeis-account {}")
-exec("furynoded set-genesis-oracle-admin {}")
-exec("furynoded set-denom-whitelist {}")
+exec("furynd add-genesis-validators {valoper}")
+exec("furynd add-geneeis-account {}")
+exec("furynd set-genesis-oracle-admin {}")
+exec("furynd set-denom-whitelist {}")
 
 ## Coupled with the localnet framework
 

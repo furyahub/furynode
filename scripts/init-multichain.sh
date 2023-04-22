@@ -7,103 +7,103 @@ if ! type "hermes" > /dev/null; then
 fi
 
 ### chain init script for development purposes only ###
-killall furynoded
+killall furynd
 killall hermes
 rm -rf ~/.furynode-1
 rm -rf ~/.furynode-2
 rm -rf ~/.furynode-3
 make clean install
-furynoded init test --chain-id=localnet-1 -o --home ~/.furynode-1
+furynd init test --chain-id=localnet-1 -o --home ~/.furynode-1
 
 echo "Generating deterministic account - fury"
-echo "race draft rival universe maid cheese steel logic crowd fork comic easy truth drift tomorrow eye buddy head time cash swing swift midnight borrow" | furynoded keys add fury --recover --keyring-backend=test --home ~/.furynode-1
+echo "race draft rival universe maid cheese steel logic crowd fork comic easy truth drift tomorrow eye buddy head time cash swing swift midnight borrow" | furynd keys add fury --recover --keyring-backend=test --home ~/.furynode-1
 
 echo "Generating deterministic account - akasha"
-echo "hand inmate canvas head lunar naive increase recycle dog ecology inhale december wide bubble hockey dice worth gravity ketchup feed balance parent secret orchard" | furynoded keys add akasha --recover --keyring-backend=test --home ~/.furynode-1
+echo "hand inmate canvas head lunar naive increase recycle dog ecology inhale december wide bubble hockey dice worth gravity ketchup feed balance parent secret orchard" | furynd keys add akasha --recover --keyring-backend=test --home ~/.furynode-1
 
 
-furynoded keys add mkey --multisig fury,akasha --multisig-threshold 2 --keyring-backend=test --home ~/.furynode-1
+furynd keys add mkey --multisig fury,akasha --multisig-threshold 2 --keyring-backend=test --home ~/.furynode-1
 
-furynoded add-genesis-account $(furynoded keys show fury -a --keyring-backend=test --home ~/.furynode-1) 50000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink --keyring-backend=test --home ~/.furynode-1
-furynoded add-genesis-account $(furynoded keys show akasha -a --keyring-backend=test --home ~/.furynode-1) 500000000000000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink --keyring-backend=test --home ~/.furynode-1
+furynd add-genesis-account $(furynd keys show fury -a --keyring-backend=test --home ~/.furynode-1) 50000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink --keyring-backend=test --home ~/.furynode-1
+furynd add-genesis-account $(furynd keys show akasha -a --keyring-backend=test --home ~/.furynode-1) 500000000000000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink --keyring-backend=test --home ~/.furynode-1
 
-furynoded add-genesis-clp-admin $(furynoded keys show fury -a --keyring-backend=test --home ~/.furynode-1) --keyring-backend=test --home ~/.furynode-1
-furynoded add-genesis-clp-admin $(furynoded keys show akasha -a --keyring-backend=test --home ~/.furynode-1 ) --keyring-backend=test --home ~/.furynode-1
-furynoded set-genesis-whitelister-admin $(furynoded keys show fury -a --keyring-backend=test --home ~/.furynode-1) --keyring-backend=test --home ~/.furynode-1
-furynoded set-gen-denom-whitelist scripts/denoms.json --home ~/.furynode-1
+furynd add-genesis-clp-admin $(furynd keys show fury -a --keyring-backend=test --home ~/.furynode-1) --keyring-backend=test --home ~/.furynode-1
+furynd add-genesis-clp-admin $(furynd keys show akasha -a --keyring-backend=test --home ~/.furynode-1 ) --keyring-backend=test --home ~/.furynode-1
+furynd set-genesis-whitelister-admin $(furynd keys show fury -a --keyring-backend=test --home ~/.furynode-1) --keyring-backend=test --home ~/.furynode-1
+furynd set-gen-denom-whitelist scripts/denoms.json --home ~/.furynode-1
 
-furynoded add-genesis-validators $(furynoded keys show fury -a --bech val --keyring-backend=test --home ~/.furynode-1) --keyring-backend=test --home ~/.furynode-1
+furynd add-genesis-validators $(furynd keys show fury -a --bech val --keyring-backend=test --home ~/.furynode-1) --keyring-backend=test --home ~/.furynode-1
 
-furynoded gentx fury 1000000000000000000000000stake --keyring-backend=test --home ~/.furynode-1 --chain-id=localnet-1
-
-echo "Collecting genesis txs..."
-furynoded collect-gentxs --home ~/.furynode-1
-
-echo "Validating genesis file..."
-furynoded validate-genesis --home ~/.furynode-1
-
-
-
-furynoded init test --chain-id=localnet-2 -o --home ~/.furynode-2
-
-
-echo "Generating deterministic account - fury"
-echo "race draft rival universe maid cheese steel logic crowd fork comic easy truth drift tomorrow eye buddy head time cash swing swift midnight borrow" | furynoded keys add fury --recover --keyring-backend=test --home ~/.furynode-2
-
-echo "Generating deterministic account - akasha"
-echo "hand inmate canvas head lunar naive increase recycle dog ecology inhale december wide bubble hockey dice worth gravity ketchup feed balance parent secret orchard" | furynoded keys add akasha --recover --keyring-backend=test --home ~/.furynode-2
-
-
-furynoded keys add mkey --multisig fury,akasha --multisig-threshold 2 --keyring-backend=test --home ~/.furynode-2
-
-furynoded add-genesis-account $(furynoded keys show fury -a --keyring-backend=test --home ~/.furynode-2 ) 50000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink --keyring-backend=test --home ~/.furynode-2
-furynoded add-genesis-account $(furynoded keys show akasha -a --keyring-backend=test --home ~/.furynode-2) 500000000000000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink --keyring-backend=test --home ~/.furynode-2
-
-furynoded add-genesis-clp-admin $(furynoded keys show fury -a --keyring-backend=test --home ~/.furynode-2 ) --keyring-backend=test --home ~/.furynode-2
-furynoded add-genesis-clp-admin $(furynoded keys show akasha -a --keyring-backend=test --home ~/.furynode-2) --keyring-backend=test --home ~/.furynode-2
-furynoded set-genesis-whitelister-admin $(furynoded keys show fury -a --keyring-backend=test --home ~/.furynode-2) --keyring-backend=test --home ~/.furynode-2
-furynoded set-gen-denom-whitelist scripts/denoms.json --home ~/.furynode-2
-furynoded add-genesis-validators $(furynoded keys show fury -a --bech val --keyring-backend=test --home ~/.furynode-2 ) --keyring-backend=test --home ~/.furynode-2
-
-furynoded gentx fury 1000000000000000000000000stake --chain-id=localnet --keyring-backend=test --home ~/.furynode-2 --chain-id=localnet-2
-
+furynd gentx fury 1000000000000000000000000stake --keyring-backend=test --home ~/.furynode-1 --chain-id=localnet-1
 
 echo "Collecting genesis txs..."
-furynoded collect-gentxs --home ~/.furynode-2
+furynd collect-gentxs --home ~/.furynode-1
 
 echo "Validating genesis file..."
-furynoded validate-genesis --home ~/.furynode-2
+furynd validate-genesis --home ~/.furynode-1
 
 
 
-furynoded init test --chain-id=localnet-3 -o --home ~/.furynode-3
+furynd init test --chain-id=localnet-2 -o --home ~/.furynode-2
 
 
 echo "Generating deterministic account - fury"
-echo "race draft rival universe maid cheese steel logic crowd fork comic easy truth drift tomorrow eye buddy head time cash swing swift midnight borrow" | furynoded keys add fury --recover --keyring-backend=test --home ~/.furynode-3
+echo "race draft rival universe maid cheese steel logic crowd fork comic easy truth drift tomorrow eye buddy head time cash swing swift midnight borrow" | furynd keys add fury --recover --keyring-backend=test --home ~/.furynode-2
 
 echo "Generating deterministic account - akasha"
-echo "hand inmate canvas head lunar naive increase recycle dog ecology inhale december wide bubble hockey dice worth gravity ketchup feed balance parent secret orchard" | furynoded keys add akasha --recover --keyring-backend=test --home ~/.furynode-3
+echo "hand inmate canvas head lunar naive increase recycle dog ecology inhale december wide bubble hockey dice worth gravity ketchup feed balance parent secret orchard" | furynd keys add akasha --recover --keyring-backend=test --home ~/.furynode-2
 
 
-furynoded keys add mkey --multisig fury,akasha --multisig-threshold 2 --keyring-backend=test --home ~/.furynode-3
+furynd keys add mkey --multisig fury,akasha --multisig-threshold 2 --keyring-backend=test --home ~/.furynode-2
 
-furynoded add-genesis-account $(furynoded keys show fury -a --keyring-backend=test --home ~/.furynode-3 ) 50000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink --keyring-backend=test --home ~/.furynode-3
-furynoded add-genesis-account $(furynoded keys show akasha -a --keyring-backend=test --home ~/.furynode-3) 500000000000000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink --keyring-backend=test --home ~/.furynode-3
+furynd add-genesis-account $(furynd keys show fury -a --keyring-backend=test --home ~/.furynode-2 ) 50000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink --keyring-backend=test --home ~/.furynode-2
+furynd add-genesis-account $(furynd keys show akasha -a --keyring-backend=test --home ~/.furynode-2) 500000000000000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink --keyring-backend=test --home ~/.furynode-2
 
-furynoded add-genesis-clp-admin $(furynoded keys show fury -a --keyring-backend=test --home ~/.furynode-3 ) --keyring-backend=test --home ~/.furynode-3
-furynoded add-genesis-clp-admin $(furynoded keys show akasha -a --keyring-backend=test --home ~/.furynode-3) --keyring-backend=test --home ~/.furynode-3
-furynoded set-genesis-whitelister-admin $(furynoded keys show fury -a --keyring-backend=test --home ~/.furynode-3) --keyring-backend=test --home ~/.furynode-3
-furynoded set-gen-denom-whitelist scripts/denoms.json --home ~/.furynode-3
-furynoded add-genesis-validators $(furynoded keys show fury -a --bech val --keyring-backend=test --home ~/.furynode-3 ) --keyring-backend=test --home ~/.furynode-3
+furynd add-genesis-clp-admin $(furynd keys show fury -a --keyring-backend=test --home ~/.furynode-2 ) --keyring-backend=test --home ~/.furynode-2
+furynd add-genesis-clp-admin $(furynd keys show akasha -a --keyring-backend=test --home ~/.furynode-2) --keyring-backend=test --home ~/.furynode-2
+furynd set-genesis-whitelister-admin $(furynd keys show fury -a --keyring-backend=test --home ~/.furynode-2) --keyring-backend=test --home ~/.furynode-2
+furynd set-gen-denom-whitelist scripts/denoms.json --home ~/.furynode-2
+furynd add-genesis-validators $(furynd keys show fury -a --bech val --keyring-backend=test --home ~/.furynode-2 ) --keyring-backend=test --home ~/.furynode-2
 
-furynoded gentx fury 1000000000000000000000000stake --chain-id=localnet-3 --keyring-backend=test --home ~/.furynode-3 --chain-id=localnet-3
+furynd gentx fury 1000000000000000000000000stake --chain-id=localnet --keyring-backend=test --home ~/.furynode-2 --chain-id=localnet-2
+
 
 echo "Collecting genesis txs..."
-furynoded collect-gentxs --home ~/.furynode-3
+furynd collect-gentxs --home ~/.furynode-2
 
 echo "Validating genesis file..."
-furynoded validate-genesis --home ~/.furynode-3
+furynd validate-genesis --home ~/.furynode-2
+
+
+
+furynd init test --chain-id=localnet-3 -o --home ~/.furynode-3
+
+
+echo "Generating deterministic account - fury"
+echo "race draft rival universe maid cheese steel logic crowd fork comic easy truth drift tomorrow eye buddy head time cash swing swift midnight borrow" | furynd keys add fury --recover --keyring-backend=test --home ~/.furynode-3
+
+echo "Generating deterministic account - akasha"
+echo "hand inmate canvas head lunar naive increase recycle dog ecology inhale december wide bubble hockey dice worth gravity ketchup feed balance parent secret orchard" | furynd keys add akasha --recover --keyring-backend=test --home ~/.furynode-3
+
+
+furynd keys add mkey --multisig fury,akasha --multisig-threshold 2 --keyring-backend=test --home ~/.furynode-3
+
+furynd add-genesis-account $(furynd keys show fury -a --keyring-backend=test --home ~/.furynode-3 ) 50000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink --keyring-backend=test --home ~/.furynode-3
+furynd add-genesis-account $(furynd keys show akasha -a --keyring-backend=test --home ~/.furynode-3) 500000000000000000000000fury,500000000000000000000000catk,500000000000000000000000cbtk,500000000000000000000000ceth,990000000000000000000000000stake,500000000000000000000000cdash,500000000000000000000000clink --keyring-backend=test --home ~/.furynode-3
+
+furynd add-genesis-clp-admin $(furynd keys show fury -a --keyring-backend=test --home ~/.furynode-3 ) --keyring-backend=test --home ~/.furynode-3
+furynd add-genesis-clp-admin $(furynd keys show akasha -a --keyring-backend=test --home ~/.furynode-3) --keyring-backend=test --home ~/.furynode-3
+furynd set-genesis-whitelister-admin $(furynd keys show fury -a --keyring-backend=test --home ~/.furynode-3) --keyring-backend=test --home ~/.furynode-3
+furynd set-gen-denom-whitelist scripts/denoms.json --home ~/.furynode-3
+furynd add-genesis-validators $(furynd keys show fury -a --bech val --keyring-backend=test --home ~/.furynode-3 ) --keyring-backend=test --home ~/.furynode-3
+
+furynd gentx fury 1000000000000000000000000stake --chain-id=localnet-3 --keyring-backend=test --home ~/.furynode-3 --chain-id=localnet-3
+
+echo "Collecting genesis txs..."
+furynd collect-gentxs --home ~/.furynode-3
+
+echo "Validating genesis file..."
+furynd validate-genesis --home ~/.furynode-3
 
 rm -rf abci_*.log
 rm -rf hermes.log
@@ -114,35 +114,35 @@ sed -i -s 's/        "voting_period": "172800s"/        "voting_period": "60s"/g
 sed -i -s 's/        "voting_period": "172800s"/        "voting_period": "60s"/g' ~/.furynode-2/config/genesis.json
 sed -i -s 's/        "voting_period": "172800s"/        "voting_period": "60s"/g' ~/.furynode-3/config/genesis.json
 
-echo "Starting furynoded's"
+echo "Starting furynd's"
 
 sleep 1
-furynoded start --home ~/.furynode-1 --p2p.laddr 0.0.0.0:27655  --grpc.address 0.0.0.0:9090 --grpc-web.address 0.0.0.0:9093 --address tcp://0.0.0.0:27659 --rpc.laddr tcp://127.0.0.1:27665 >> abci_1.log 2>&1  &
+furynd start --home ~/.furynode-1 --p2p.laddr 0.0.0.0:27655  --grpc.address 0.0.0.0:9090 --grpc-web.address 0.0.0.0:9093 --address tcp://0.0.0.0:27659 --rpc.laddr tcp://127.0.0.1:27665 >> abci_1.log 2>&1  &
 sleep 1
-furynoded start --home ~/.furynode-2 --p2p.laddr 0.0.0.0:27656  --grpc.address 0.0.0.0:9091 --grpc-web.address 0.0.0.0:9094 --address tcp://0.0.0.0:27660 --rpc.laddr tcp://127.0.0.1:27666 >> abci_2.log 2>&1  &
+furynd start --home ~/.furynode-2 --p2p.laddr 0.0.0.0:27656  --grpc.address 0.0.0.0:9091 --grpc-web.address 0.0.0.0:9094 --address tcp://0.0.0.0:27660 --rpc.laddr tcp://127.0.0.1:27666 >> abci_2.log 2>&1  &
 sleep 1
-furynoded start --home ~/.furynode-3 --p2p.laddr 0.0.0.0:27657  --grpc.address 0.0.0.0:9092 --grpc-web.address 0.0.0.0:9095 --address tcp://0.0.0.0:27661 --rpc.laddr tcp://127.0.0.1:27667 >> abci_3.log 2>&1 &
+furynd start --home ~/.furynode-3 --p2p.laddr 0.0.0.0:27657  --grpc.address 0.0.0.0:9092 --grpc-web.address 0.0.0.0:9095 --address tcp://0.0.0.0:27661 --rpc.laddr tcp://127.0.0.1:27667 >> abci_3.log 2>&1 &
 sleep 10
 
 echo "updating token registries with IBC paths"
 echo "doing localnet-1"
-furynoded tx tokenregistry register scripts/fury-localnet-1-localnet-2.json --node tcp://127.0.0.1:27665 --keyring-backend test --chain-id localnet-1 --from fury --gas 200000 --gas-prices 0.5fury --home ~/.furynode-1 --yes
+furynd tx tokenregistry register scripts/fury-localnet-1-localnet-2.json --node tcp://127.0.0.1:27665 --keyring-backend test --chain-id localnet-1 --from fury --gas 200000 --gas-prices 0.5fury --home ~/.furynode-1 --yes
 sleep 10
-furynoded tx tokenregistry register scripts/fury-localnet-1-localnet-3.json --node tcp://127.0.0.1:27665 --keyring-backend test --chain-id localnet-1 --from fury --gas 200000 --gas-prices 0.5fury --home ~/.furynode-1 --yes
+furynd tx tokenregistry register scripts/fury-localnet-1-localnet-3.json --node tcp://127.0.0.1:27665 --keyring-backend test --chain-id localnet-1 --from fury --gas 200000 --gas-prices 0.5fury --home ~/.furynode-1 --yes
 echo ""
 sleep 10
 
 echo "Doing localnet-2"
-furynoded tx tokenregistry register scripts/fury-localnet-2-localnet-1.json --node tcp://127.0.0.1:27666 --keyring-backend test --chain-id localnet-2 --from fury --gas 200000 --gas-prices 0.5fury --home ~/.furynode-2 --yes
+furynd tx tokenregistry register scripts/fury-localnet-2-localnet-1.json --node tcp://127.0.0.1:27666 --keyring-backend test --chain-id localnet-2 --from fury --gas 200000 --gas-prices 0.5fury --home ~/.furynode-2 --yes
 sleep 10
-furynoded tx tokenregistry register scripts/fury-localnet-2-localnet-3.json --node tcp://127.0.0.1:27666 --keyring-backend test --chain-id localnet-2 --from fury --gas 200000 --gas-prices 0.5fury --home ~/.furynode-2 --yes
+furynd tx tokenregistry register scripts/fury-localnet-2-localnet-3.json --node tcp://127.0.0.1:27666 --keyring-backend test --chain-id localnet-2 --from fury --gas 200000 --gas-prices 0.5fury --home ~/.furynode-2 --yes
 echo ""
 sleep 10
 
 echo "Doing localnet-3"
-furynoded tx tokenregistry register scripts/fury-localnet-3-localnet-1.json --node tcp://127.0.0.1:27667 --keyring-backend test --chain-id localnet-3 --from fury --gas 200000 --gas-prices 0.5fury --home ~/.furynode-3 --yes
+furynd tx tokenregistry register scripts/fury-localnet-3-localnet-1.json --node tcp://127.0.0.1:27667 --keyring-backend test --chain-id localnet-3 --from fury --gas 200000 --gas-prices 0.5fury --home ~/.furynode-3 --yes
 sleep 10
-furynoded tx tokenregistry register scripts/fury-localnet-3-localnet-2.json --node tcp://127.0.0.1:27667 --keyring-backend test --chain-id localnet-3 --from fury --gas 200000 --gas-prices 0.5fury --home ~/.furynode-3 --yes
+furynd tx tokenregistry register scripts/fury-localnet-3-localnet-2.json --node tcp://127.0.0.1:27667 --keyring-backend test --chain-id localnet-3 --from fury --gas 200000 --gas-prices 0.5fury --home ~/.furynode-3 --yes
 echo ""
 
 sleep 10

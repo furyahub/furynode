@@ -35,11 +35,11 @@ def run_localnet_hook():
 
     # rm -rf /tmp/localnet/config/furynet/furynet-testnet-1
     # mkdir -p /tmp/localnet/config/furynet/furynet-testnet-1
-    # /tmp/localnet/bin/furynoded init furynet-testnet-1 --chain-id furynet-testnet-1 --home /tmp/localnet/config/furynet/furynet-testnet-1
-    # /tmp/localnet/bin/furynoded keys add furynet-validator --keyring-backend test --home /tmp/localnet/config/furynet/furynet-testnet-1
-    # /tmp/localnet/bin/furynoded keys add furynet-source --keyring-backend test --home /tmp/localnet/config/furynet/furynet-testnet-1
-    # /tmp/localnet/bin/furynoded add-genesis-account furynet-validator 10000000000000000000fury --keyring-backend test --home /tmp/localnet/config/furynet/furynet-testnet-1
-    # /tmp/localnet/bin/furynoded add-genesis-account furynet-source 10000000000000000000fury --keyring-backend test --home /tmp/localnet/config/furynet/furynet-testnet-1
+    # /tmp/localnet/bin/furynd init furynet-testnet-1 --chain-id furynet-testnet-1 --home /tmp/localnet/config/furynet/furynet-testnet-1
+    # /tmp/localnet/bin/furynd keys add furynet-validator --keyring-backend test --home /tmp/localnet/config/furynet/furynet-testnet-1
+    # /tmp/localnet/bin/furynd keys add furynet-source --keyring-backend test --home /tmp/localnet/config/furynet/furynet-testnet-1
+    # /tmp/localnet/bin/furynd add-genesis-account furynet-validator 10000000000000000000fury --keyring-backend test --home /tmp/localnet/config/furynet/furynet-testnet-1
+    # /tmp/localnet/bin/furynd add-genesis-account furynet-source 10000000000000000000fury --keyring-backend test --home /tmp/localnet/config/furynet/furynet-testnet-1
 
     # For each chain:
     # defaultGenesis = what was created in ${home}/config/genesis.json
@@ -53,7 +53,7 @@ def run_localnet_hook():
     # ${binPath}/${binary} gentx ${validatorAccountName} ${amount}${denom} --chain-id ${chainId} --keyring-backend test --home ${home}
     # ${binPath}/${binary} collect-gentxs --home ${home}
 
-    localnet.start_all_chains()  # Runs furynoded and gaiad
+    localnet.start_all_chains()  # Runs furynd and gaiad
 
 
 

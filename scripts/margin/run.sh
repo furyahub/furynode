@@ -2,8 +2,8 @@
 
 set -x
 
-killall furynoded
+killall furynd
 
 cd ../..
 make install
-furynoded start --trace
+furynd start --trace

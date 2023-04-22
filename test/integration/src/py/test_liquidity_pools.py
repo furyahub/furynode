@@ -9,7 +9,7 @@ from burn_lock_functions import EthereumToFurynetTransferRequest
 import test_utilities
 from pytest_utilities import generate_test_account
 from test_utilities import get_required_env_var, FurynetcliCredentials, get_optional_env_var, ganache_owner_account, \
-    get_shell_output_json, get_shell_output, detect_errors_in_furynoded_output, get_transaction_result, amount_in_wei, furynoded_binary
+    get_shell_output_json, get_shell_output, detect_errors_in_furynd_output, get_transaction_result, amount_in_wei, furynd_binary
 
 smart_contracts_dir = get_required_env_var("SMART_CONTRACTS_DIR")
 bridgebank_address = get_required_env_var("BRIDGE_BANK_ADDRESS")
@@ -31,9 +31,9 @@ def generate_new_currency(symbol, amount, solidity_json_path, operator_address, 
     )
     return new_currency
 
-def get_pools(furynoded_node):
-    node = f"--node {furynoded_node}" if furynoded_node else ""
-    command_line = f"{furynoded_binary} q clp pools {node} --output json"
+def get_pools(furynd_node):
+    node = f"--node {furynd_node}" if furynd_node else ""
+    command_line = f"{furynd_binary} q clp pools {node} --output json"
     # returns error when empty
     try:
         json_str = get_shell_output_json(command_line)
@@ -49,11 +49,11 @@ def create_pool(
     yes_entry = f"yes {credentials.keyring_passphrase} | " if credentials.keyring_passphrase else ""
     keyring_backend_entry = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
     chain_id_entry = f"--chain-id {transfer_request.chain_id}" if transfer_request.chain_id else ""
-    node = f"--node {transfer_request.furynoded_node}" if transfer_request.furynoded_node else ""
+    node = f"--node {transfer_request.furynd_node}" if transfer_request.furynd_node else ""
     furynet_fees_entry = f"--fees {transfer_request.furynet_fees}" if transfer_request.furynet_fees else ""
     cmd = " ".join([
         yes_entry,
-        f"{furynoded_binary} tx clp create-pool",
+        f"{furynd_binary} tx clp create-pool",
         f"--from {transfer_request.furynet_address}",
         f"--symbol {transfer_request.furynet_symbol}",
         f"--nativeAmount {transfer_request.amount}",
@@ -62,7 +62,7 @@ def create_pool(
         chain_id_entry,
         node,
         furynet_fees_entry,
-        f"--home {credentials.furynoded_homedir} ",
+        f"--home {credentials.furynd_homedir} ",
         "-y --output json"
     ])
     return get_shell_output_json(cmd)
@@ -76,11 +76,11 @@ def swap_pool(
     yes_entry = f"yes {credentials.keyring_passphrase} | " if credentials.keyring_passphrase else ""
     keyring_backend_entry = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
     chain_id_entry = f"--chain-id {transfer_request.chain_id}" if transfer_request.chain_id else ""
-    node = f"--node {transfer_request.furynoded_node}" if transfer_request.furynoded_node else ""
+    node = f"--node {transfer_request.furynd_node}" if transfer_request.furynd_node else ""
     furynet_fees_entry = f"--fees {transfer_request.furynet_fees}" if transfer_request.furynet_fees else ""
     cmd = " ".join([
         yes_entry,
-        f"{furynoded_binary} tx clp swap",
+        f"{furynd_binary} tx clp swap",
         f"--from {transfer_request.furynet_address}",
         f"--sentSymbol {sent_symbol}",
         f"--receivedSymbol {received_symbol}",
@@ -90,11 +90,11 @@ def swap_pool(
         chain_id_entry,
         node,
         furynet_fees_entry,
-        f"--home {credentials.furynoded_homedir} ",
+        f"--home {credentials.furynd_homedir} ",
         "-y --output json"
     ])
     json_str = get_shell_output_json(cmd)
-    txn = get_transaction_result(json_str["txhash"], transfer_request.furynoded_node, transfer_request.chain_id)
+    txn = get_transaction_result(json_str["txhash"], transfer_request.furynd_node, transfer_request.chain_id)
     tx = txn["tx"]
     logging.debug(f"resulting tx: {tx}")
     return txn
@@ -108,11 +108,11 @@ def remove_pool_liquidity(
     yes_entry = f"yes {credentials.keyring_passphrase} | " if credentials.keyring_passphrase else ""
     keyring_backend_entry = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
     chain_id_entry = f"--chain-id {transfer_request.chain_id}" if transfer_request.chain_id else ""
-    node = f"--node {transfer_request.furynoded_node}" if transfer_request.furynoded_node else ""
+    node = f"--node {transfer_request.furynd_node}" if transfer_request.furynd_node else ""
     furynet_fees_entry = f"--fees {transfer_request.furynet_fees}" if transfer_request.furynet_fees else ""
     cmd = " ".join([
         yes_entry,
-        f"{furynoded_binary} tx clp remove-liquidity",
+        f"{furynd_binary} tx clp remove-liquidity",
         f"--from {transfer_request.furynet_address}",
         f"--symbol {transfer_request.furynet_symbol}",
         f"--wBasis {wBasis}",
@@ -121,11 +121,11 @@ def remove_pool_liquidity(
         chain_id_entry,
         node,
         furynet_fees_entry,
-        f"--home {credentials.furynoded_homedir} ",
+        f"--home {credentials.furynd_homedir} ",
         "-y --output json"
     ])
     json_str = get_shell_output_json(cmd)
-    txn = get_transaction_result(json_str["txhash"], transfer_request.furynoded_node, transfer_request.chain_id)
+    txn = get_transaction_result(json_str["txhash"], transfer_request.furynd_node, transfer_request.chain_id)
     tx = txn["tx"]
     logging.debug(f"resulting tx: {tx}")
     return txn
@@ -138,11 +138,11 @@ def add_pool_liquidity(
     yes_entry = f"yes {credentials.keyring_passphrase} | " if credentials.keyring_passphrase else ""
     keyring_backend_entry = f"--keyring-backend {credentials.keyring_backend}" if credentials.keyring_backend else ""
     chain_id_entry = f"--chain-id {transfer_request.chain_id}" if transfer_request.chain_id else ""
-    node = f"--node {transfer_request.furynoded_node}" if transfer_request.furynoded_node else ""
+    node = f"--node {transfer_request.furynd_node}" if transfer_request.furynd_node else ""
     furynet_fees_entry = f"--fees {transfer_request.furynet_fees}" if transfer_request.furynet_fees else ""
     cmd = " ".join([
         yes_entry,
-        f"{furynoded_binary} tx clp add-liquidity",
+        f"{furynd_binary} tx clp add-liquidity",
         f"--from {transfer_request.furynet_address}",
         f"--symbol {transfer_request.furynet_symbol}",
         f"--nativeAmount {transfer_request.amount}",
@@ -151,11 +151,11 @@ def add_pool_liquidity(
         chain_id_entry,
         node,
         furynet_fees_entry,
-        f"--home {credentials.furynoded_homedir} ",
+        f"--home {credentials.furynd_homedir} ",
         "-y --output json"
     ])
     json_str = get_shell_output_json(cmd)
-    txn = get_transaction_result(json_str["txhash"], transfer_request.furynoded_node, transfer_request.chain_id)
+    txn = get_transaction_result(json_str["txhash"], transfer_request.furynd_node, transfer_request.chain_id)
     tx = txn["tx"]
     logging.debug(f"resulting tx: {tx}")
     return txn
@@ -182,10 +182,10 @@ def test_create_pools(
 
     furyaddress = request.furynet_address
     # wait for balance
-    test_utilities.wait_for_furynet_addr_balance(furyaddress, "fury", target_fury_balance, basic_transfer_request.furynoded_node)
-    test_utilities.wait_for_furynet_addr_balance(furyaddress, "ceth", target_ceth_balance, basic_transfer_request.furynoded_node)
+    test_utilities.wait_for_furynet_addr_balance(furyaddress, "fury", target_fury_balance, basic_transfer_request.furynd_node)
+    test_utilities.wait_for_furynet_addr_balance(furyaddress, "ceth", target_ceth_balance, basic_transfer_request.furynd_node)
 
-    pools = get_pools(basic_transfer_request.furynoded_node)
+    pools = get_pools(basic_transfer_request.furynd_node)
     change_amount = 10 ** 18
     basic_transfer_request.amount = change_amount
     basic_transfer_request.furynet_symbol = "ceth"
@@ -196,19 +196,19 @@ def test_create_pools(
     # Only works the first time, fails later.  Make this flexible for manual and private net testing for now.
     if pools is None:
         create_pool(basic_transfer_request, credentials)
-        get_pools(basic_transfer_request.furynoded_node)
+        get_pools(basic_transfer_request.furynd_node)
         current_ceth_balance = current_ceth_balance - change_amount
         current_fury_balance = current_fury_balance - change_amount - furynet_fees_int
-        assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury") == current_fury_balance)
-        assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "ceth") == current_ceth_balance)
+        assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury") == current_fury_balance)
+        assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "ceth") == current_ceth_balance)
 
     # check for failure if we try to create a pool twice
     txn = create_pool(basic_transfer_request, credentials)
     assert(txn["code"] == 14)
-    get_pools(basic_transfer_request.furynoded_node)
+    get_pools(basic_transfer_request.furynd_node)
     current_fury_balance = current_fury_balance - furynet_fees_int
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury") == current_fury_balance)
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "ceth") == current_ceth_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury") == current_fury_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "ceth") == current_ceth_balance)
 
 # @pytest.mark.skip(reason="not now")
 @pytest.mark.usefixtures("operator_private_key")
@@ -261,8 +261,8 @@ def test_pools(
 
     furyaddress = request.furynet_address
     # wait for balance
-    test_utilities.wait_for_furynet_addr_balance(furyaddress, "fury", target_fury_balance, basic_transfer_request.furynoded_node)
-    test_utilities.wait_for_furynet_addr_balance(furyaddress, furynet_symbol, target_new_currency_balance, basic_transfer_request.furynoded_node)
+    test_utilities.wait_for_furynet_addr_balance(furyaddress, "fury", target_fury_balance, basic_transfer_request.furynd_node)
+    test_utilities.wait_for_furynet_addr_balance(furyaddress, furynet_symbol, target_new_currency_balance, basic_transfer_request.furynd_node)
 
     request2, credentials2 = generate_test_account(
         basic_transfer_request,
@@ -280,10 +280,10 @@ def test_pools(
 
     furyaddress2 = request2.furynet_address
     # wait for balance
-    test_utilities.wait_for_furynet_addr_balance(furyaddress2, "fury", target_fury_balance, basic_transfer_request.furynoded_node)
-    test_utilities.wait_for_furynet_addr_balance(furyaddress2, furynet_symbol, target_new_currency_balance, basic_transfer_request.furynoded_node)
+    test_utilities.wait_for_furynet_addr_balance(furyaddress2, "fury", target_fury_balance, basic_transfer_request.furynd_node)
+    test_utilities.wait_for_furynet_addr_balance(furyaddress2, furynet_symbol, target_new_currency_balance, basic_transfer_request.furynd_node)
 
-    pools = get_pools(basic_transfer_request.furynoded_node)
+    pools = get_pools(basic_transfer_request.furynd_node)
     basic_transfer_request.furynet_symbol = furynet_symbol
     basic_transfer_request.furynet_address = furyaddress
     current_coin_balance = target_new_currency_balance
@@ -295,7 +295,7 @@ def test_pools(
     txn = create_pool(basic_transfer_request, credentials)
     assert(txn["code"] == 12)
     current_fury_balance = current_fury_balance - furynet_fees_int
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury") == current_fury_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury") == current_fury_balance)
 
     change_amount = 10 ** 17
     basic_transfer_request.amount = change_amount
@@ -303,62 +303,62 @@ def test_pools(
     txn = create_pool(basic_transfer_request, credentials)
     assert(txn["code"] == 7)
     current_fury_balance = current_fury_balance - furynet_fees_int
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury") == current_fury_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury") == current_fury_balance)
 
     change_amount = 10 ** 18
     basic_transfer_request.amount = change_amount
     logging.info("Only works the first time, fails later")
     txn = create_pool(basic_transfer_request, credentials2)
     assert(txn.get("code", 0) == 0)
-    get_pools(basic_transfer_request.furynoded_node)
+    get_pools(basic_transfer_request.furynd_node)
     current_coin_balance = current_coin_balance - change_amount
     current_fury_balance = current_fury_balance - change_amount - furynet_fees_int
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury") == current_fury_balance)
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, furynet_symbol) == current_coin_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury") == current_fury_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, furynet_symbol) == current_coin_balance)
 
     logging.info("check for failure if we try to create a pool twice")
     txn = create_pool(basic_transfer_request, credentials)
     assert(txn["code"] == 14)
-    get_pools(basic_transfer_request.furynoded_node)
+    get_pools(basic_transfer_request.furynd_node)
     current_fury_balance = current_fury_balance - furynet_fees_int
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury") == current_fury_balance)
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, furynet_symbol) == current_coin_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury") == current_fury_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, furynet_symbol) == current_coin_balance)
 
     logging.info("ensure we can add liquidity, money gets transferred")
     txn = add_pool_liquidity(basic_transfer_request, credentials)
     assert(txn.get("code", 0) == 0)
-    get_pools(basic_transfer_request.furynoded_node)
+    get_pools(basic_transfer_request.furynd_node)
     current_coin_balance = current_coin_balance - change_amount
     current_fury_balance = current_fury_balance - change_amount - furynet_fees_int
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury") == current_fury_balance)
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, furynet_symbol) == current_coin_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury") == current_fury_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, furynet_symbol) == current_coin_balance)
 
     logging.info("ensure we can remove liquidity, money gets transferred")
     txn = remove_pool_liquidity(basic_transfer_request, credentials, 5000)
     assert(txn.get("code", 0) == 0)
-    get_pools(basic_transfer_request.furynoded_node)
+    get_pools(basic_transfer_request.furynd_node)
     current_coin_balance = current_coin_balance + change_amount
     current_fury_balance = current_fury_balance + change_amount - furynet_fees_int
 
     # check for failure if we try to remove more
     txn = remove_pool_liquidity(basic_transfer_request, credentials, 10000)
     assert(txn["code"] == 26)
-    get_pools(basic_transfer_request.furynoded_node)
+    get_pools(basic_transfer_request.furynd_node)
     current_fury_balance = current_fury_balance - furynet_fees_int
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury") == current_fury_balance)
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, furynet_symbol) == current_coin_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury") == current_fury_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, furynet_symbol) == current_coin_balance)
 
-    #assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury") == current_fury_balance)
-    #assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, furynet_symbol) == current_ceth_balance)
+    #assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury") == current_fury_balance)
+    #assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, furynet_symbol) == current_ceth_balance)
     # no slippage if pool is perfectly balanced.
 
     # TODO: compute this precisely?
     slip_pct = 0.01
-    balance = test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury")
+    balance = test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury")
     slip_cost = (slip_pct * current_fury_balance)
     assert(balance >= current_fury_balance - slip_cost and balance <= current_fury_balance + slip_cost )
     current_fury_balance = balance
-    balance = test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, furynet_symbol)
+    balance = test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, furynet_symbol)
     slip_cost = (slip_pct * current_coin_balance)
     assert(balance >= current_coin_balance - slip_cost and balance <= current_coin_balance + slip_cost)
     current_coin_balance = balance
@@ -367,28 +367,28 @@ def test_pools(
     basic_transfer_request.amount = 10 ** 19
     txn = add_pool_liquidity(basic_transfer_request, credentials)
     assert(txn["code"] == 25)
-    get_pools(basic_transfer_request.furynoded_node)
+    get_pools(basic_transfer_request.furynd_node)
     current_fury_balance = current_fury_balance - furynet_fees_int
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury") == current_fury_balance)
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, furynet_symbol) == current_coin_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury") == current_fury_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, furynet_symbol) == current_coin_balance)
 
     # check for failure if we try to swap too much for user
     basic_transfer_request.amount = 10 ** 19
     txn = swap_pool(basic_transfer_request, "fury", furynet_symbol, credentials)
     assert(txn["code"] == 27)
-    get_pools(basic_transfer_request.furynoded_node)
+    get_pools(basic_transfer_request.furynd_node)
     current_fury_balance = current_fury_balance - furynet_fees_int
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury") == current_fury_balance)
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, furynet_symbol) == current_coin_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury") == current_fury_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, furynet_symbol) == current_coin_balance)
 
     # check for failure if we try to swap too much for pool
     basic_transfer_request.amount = 5 * 10 ** 17
     txn = swap_pool(basic_transfer_request, "fury", furynet_symbol, credentials)
     assert(txn["code"] == 31)
-    get_pools(basic_transfer_request.furynoded_node)
+    get_pools(basic_transfer_request.furynd_node)
     current_fury_balance = current_fury_balance - furynet_fees_int
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury") == current_fury_balance)
-    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, furynet_symbol) == current_coin_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury") == current_fury_balance)
+    assert(test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, furynet_symbol) == current_coin_balance)
 
     # now try to do a swap that works
     change_amount = 10 ** 15
@@ -396,9 +396,9 @@ def test_pools(
     txn = swap_pool(basic_transfer_request, "fury", furynet_symbol, credentials)
     # TODO: compute this precisely?
     slip_pct = 0.01
-    balance = test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, "fury")
+    balance = test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, "fury")
     assert(balance < current_fury_balance)
     current_fury_balance = balance
-    balance = test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynoded_node, furynet_symbol)
+    balance = test_utilities.get_furynet_addr_balance(furyaddress, basic_transfer_request.furynd_node, furynet_symbol)
     assert(balance > current_coin_balance)
     current_coin_balance = balance

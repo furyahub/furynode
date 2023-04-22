@@ -150,8 +150,8 @@ Object {
       "chainId": "furynet-1",
       "node": "https://rpc.furynet.finance:443",
     },
-    "binary": "furynoded",
-    "binaryUrl": "https://github.com/Furynet/furynode/releases/download/betanet-0.9.10/furynoded-betanet-0.9.10-linux-amd64.zip",
+    "binary": "furynd",
+    "binaryUrl": "https://github.com/Furynet/furynode/releases/download/betanet-0.9.10/furynd-betanet-0.9.10-linux-amd64.zip",
     "chainId": "furynet-testnet-1",
     "denom": "fury",
     "devnet-1": Object {

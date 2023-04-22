@@ -237,7 +237,7 @@ class InflateTokens:
         # Check first that we have the key for FURY_SOURCE since the script uses it as an intermediate address
         keys = self.ctx.furynode.keys_list()
         fury_source_key = zero_or_one([k for k in keys if k["address"] == fury_broker_account])
-        assert fury_source_key is not None, "Need private key of broker account {} in furynoded test keyring".format(fury_broker_account)
+        assert fury_source_key is not None, "Need private key of broker account {} in furynd test keyring".format(fury_broker_account)
 
         existing_tokens = self.get_whitelisted_tokens()
         tokens_to_create = self.build_list_of_tokens_to_create(existing_tokens, requested_tokens)

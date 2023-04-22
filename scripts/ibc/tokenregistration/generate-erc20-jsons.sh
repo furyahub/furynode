@@ -8,7 +8,7 @@ echo "\n\ngenerating and storing all entries for network $FURYCHAIN_ID"
 
 mkdir -p ./$FURYCHAIN_ID
 
-furynoded q tokenregistry generate \
+furynd q tokenregistry generate \
 	--token_base_denom=cxft \
 	--token_denom=cxft \
 	--token_decimals=18 \
@@ -21,7 +21,7 @@ furynoded q tokenregistry generate \
 
 echo "\n\ngenerated entry for cxft"
 
-furynoded q tokenregistry generate \
+furynd q tokenregistry generate \
 	--token_base_denom=cuos \
 	--token_denom=cuos \
 	--token_decimals=4 \
@@ -33,7 +33,7 @@ furynoded q tokenregistry generate \
 
 echo "\n\ngenerated entry for cuos"
 
-furynoded q tokenregistry generate \
+furynd q tokenregistry generate \
 	--token_denom=cnewo \
 	--token_base_denom=cnewo \
 	--token_decimals=18 \
@@ -45,7 +45,7 @@ furynoded q tokenregistry generate \
 
 echo "\n\ngenerated entry for cnewo"
 
-furynoded q tokenregistry generate \
+furynd q tokenregistry generate \
 	--token_denom=cosqth \
 	--token_base_denom=cosqth \
 	--token_decimals=18 \
@@ -57,7 +57,7 @@ furynoded q tokenregistry generate \
 
 echo "\n\ngenerated entry for cosqth"
 
-furynoded q tokenregistry generate \
+furynd q tokenregistry generate \
 	--token_denom=cgala \
 	--token_base_denom=cgala \
 	--token_decimals=8 \
@@ -70,7 +70,7 @@ furynoded q tokenregistry generate \
 echo "\n\ngenerated entry for cgala"
 
 
-furynoded q tokenregistry generate \
+furynd q tokenregistry generate \
 	--token_denom=cpush \
 	--token_base_denom=cpush \
 	--token_decimals=18 \
@@ -83,7 +83,7 @@ furynoded q tokenregistry generate \
 echo "\n\ngenerated entry for cpush"
 
 
-furynoded q tokenregistry generate \
+furynd q tokenregistry generate \
 	--token_denom=cmc \
 	--token_base_denom=cmc \
 	--token_decimals=18 \
@@ -95,7 +95,7 @@ furynoded q tokenregistry generate \
 
 echo "\n\ngenerated entry for cmc"
 
-furynoded q tokenregistry generate \
+furynd q tokenregistry generate \
 	--token_denom=cinj \
 	--token_base_denom=cinj \
 	--token_decimals=18 \
@@ -107,7 +107,7 @@ furynoded q tokenregistry generate \
 
 echo "\n\ngenerated entry for cinj"
 
-furynoded q tokenregistry generate \
+furynd q tokenregistry generate \
 	--token_denom=ccudos \
 	--token_base_denom=ccudos \
 	--token_decimals=18 \

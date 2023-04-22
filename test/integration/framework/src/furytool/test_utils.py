@@ -14,7 +14,7 @@ from furytool import eth, truffle, hardhat, run_env, furynet, cosmos, command
 from furytool.furynet import FURY, CETH
 from furytool.common import *
 
-# These are utilities to interact with running environment (running agains local ganache-cli/hardhat/furynoded).
+# These are utilities to interact with running environment (running agains local ganache-cli/hardhat/furynd).
 # This is to replace test_utilities.py, conftest.py, burn_lock_functions.py and integration_test_context.py.
 # Also to replace smart-contracts/scripts/...
 
@@ -73,7 +73,7 @@ def get_env_ctx_peggy2():
         furynet_config = env_vars["furynet"]
         furynode_url = furynet_config["rpc_url"]
         furynode_chain_id = furynet_config["chain_id"]
-        furynoded_home = furynet_config.get("home")
+        furynd_home = furynet_config.get("home")
 
         # Supported scenarios regarding fury_source:
         # (1) no fury_source, no mnemonic => set fury_source to None and assume it will not be used
@@ -90,9 +90,9 @@ def get_env_ctx_peggy2():
             if fury_source_mnemonic:
                 fury_source_mnemonic = fury_source_mnemonic.split(" ")
                 fury_source = furynet.mnemonic_to_address(cmd, fury_source_mnemonic)
-                furynoded = furynet.Furynoded(cmd, home=furynoded_home)
-                if not [x for x in furynoded.keys_list() if x["address"] == fury_source]:
-                    furynoded.keys_add(None, fury_source_mnemonic)
+                furynd = furynet.Furynd(cmd, home=furynd_home)
+                if not [x for x in furynd.keys_list() if x["address"] == fury_source]:
+                    furynd.keys_add(None, fury_source_mnemonic)
 
         eth_config = env_vars["ethereum"]
         smart_contract_addresses = {k: eth.validate_address_and_private_key(v, None)[0] for k, v in eth_config["smart_contract_addresses"].items()}
@@ -147,7 +147,7 @@ def get_env_ctx_peggy2():
         furynode_url = dot_env_vars["TCP_URL"]
         furynode_chain_id = "localnet"  # TODO Mandatory, but not present either in environment_vars or dot_env_vars
         assert dot_env_vars["CHAINDIR"] == dot_env_vars["HOME"]
-        furynoded_home = os.path.join(dot_env_vars["CHAINDIR"], ".furynoded")
+        furynd_home = os.path.join(dot_env_vars["CHAINDIR"], ".furynd")
         ethereum_network_descriptor = int(dot_env_vars["ETH_CHAIN_ID"])
 
         eth_node_is_local = True
@@ -160,7 +160,7 @@ def get_env_ctx_peggy2():
     abi_files_root = cmd.project.project_dir("smart-contracts/artifacts/contracts")
     abi_provider = hardhat.HardhatAbiProvider(cmd, abi_files_root, smart_contract_addresses)
     ctx_eth = eth.EthereumTxWrapper(w3_conn, eth_node_is_local)
-    ctx = EnvCtx(cmd, w3_conn, ctx_eth, abi_provider, owner_address, furynoded_home, furynode_url, furynode_chain_id,
+    ctx = EnvCtx(cmd, w3_conn, ctx_eth, abi_provider, owner_address, furynd_home, furynode_url, furynode_chain_id,
         fury_source, ceth_symbol, generic_erc20_contract, eth_faucet)
     if owner_private_key:
         ctx.eth.set_private_key(owner_address, owner_private_key)
@@ -176,7 +176,7 @@ def get_env_ctx_peggy2():
     # assert ctx.eth.fixed_gas_args["gasPrice"] == 1 * eth.GWEI + 7
 
     # Monkeypatching for peggy2 extras
-    # TODO These are set in run_env.py:Peggy2Environment.init_furynet(), specifically "furynoded tx ethbridge set-cross-chain-fee"
+    # TODO These are set in run_env.py:Peggy2Environment.init_furynet(), specifically "furynd tx ethbridge set-cross-chain-fee"
     # Consider passing them via environment
     ctx.eth.cross_chain_fee_base = 1
     ctx.eth.cross_chain_lock_fee = 1
@@ -261,7 +261,7 @@ def get_env_ctx_peggy1(cmd=None, env_file=None, env_vars=None):
         artifacts_dir = cmd.project.project_dir("smart-contracts/build/contracts")
 
     furynode_url = env_vars.get("FURYNODE")  # Defaults to "tcp://localhost:26657"
-    furynoded_home = None  # Implies default ~/.furynoded
+    furynd_home = None  # Implies default ~/.furynd
     deployed_smart_contract_address_overrides = _get_overrides_for_smart_contract_addresses(env_vars)
 
     w3_conn = eth.web3_connect(w3_url)
@@ -276,7 +276,7 @@ def get_env_ctx_peggy1(cmd=None, env_file=None, env_vars=None):
 
     ctx_eth = eth.EthereumTxWrapper(w3_conn, eth_node_is_local)
     abi_provider = truffle.GanacheAbiProvider(cmd, artifacts_dir, ethereum_network_id, deployed_smart_contract_address_overrides)
-    ctx = EnvCtx(cmd, w3_conn, ctx_eth, abi_provider, operator_address, furynoded_home, furynode_url, furynode_chain_id,
+    ctx = EnvCtx(cmd, w3_conn, ctx_eth, abi_provider, operator_address, furynd_home, furynode_url, furynode_chain_id,
         fury_source, CETH, generic_erc20_contract_name, operator_address)
     if operator_private_key:
         ctx.eth.set_private_key(operator_address, operator_private_key)
@@ -329,7 +329,7 @@ def fury_addr_to_evm_arg(fury_address):
 
 class EnvCtx:
     def __init__(self, cmd: command.Command, w3_conn: web3.Web3, ctx_eth: eth.EthereumTxWrapper, abi_provider,
-        operator: eth.Address, furynoded_home: str, furynode_url: Optional[str], furynode_chain_id: str,
+        operator: eth.Address, furynd_home: str, furynode_url: Optional[str], furynode_chain_id: str,
         fury_source: cosmos.Address, ceth_symbol: str, generic_erc20_contract: str, eth_faucet: eth.Address
     ):
         self.cmd = cmd
@@ -337,7 +337,7 @@ class EnvCtx:
         self.eth: eth.EthereumTxWrapper = ctx_eth
         self.abi_provider: hardhat.HardhatAbiProvider = abi_provider
         self.operator = operator
-        self.furynode = furynet.Furynoded(self.cmd, home=furynoded_home, node=furynode_url, chain_id=furynode_chain_id)
+        self.furynode = furynet.Furynd(self.cmd, home=furynd_home, node=furynode_url, chain_id=furynode_chain_id)
         # Refactoring in progress: moving stuff into separate client that encapsulates things like url, home and chain_id
         self.furynode_client = furynet.FurynodeClient(self, self.furynode, grpc_port=9090)
         self.fury_source = fury_source
@@ -617,7 +617,7 @@ class EnvCtx:
         self.approve_erc20_token(token_sc, from_eth_addr, amount)
         self.bridge_bank_lock_eth(from_eth_addr, dest_sichain_addr, amount)
 
-    # TODO Decouple; we want to use this with just "furynoded" running, move to Furynoded class?
+    # TODO Decouple; we want to use this with just "furynd" running, move to Furynd class?
     def create_furynet_addr(self, moniker: str = None,
         fund_amounts: Union[cosmos.Balance, cosmos.LegacyBalance, None] = None
     ) -> cosmos.Address:
@@ -673,7 +673,7 @@ class EnvCtx:
         else:
             return "c" + eth_token_symbol.lower()
 
-    # Deprecated: furynoded accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
+    # Deprecated: furynd accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
     # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
     # See https://github.com/Furynet/furynode/pull/1802#discussion_r697403408
     # The corresponding denom should be "fury".

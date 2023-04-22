@@ -2,6 +2,6 @@
 
 set -x
 
-furynoded q tokenregistry entries \
+furynd q tokenregistry entries \
     --node ${FURYNODE_NODE} \
     --chain-id $FURYNODE_CHAIN_ID | jq

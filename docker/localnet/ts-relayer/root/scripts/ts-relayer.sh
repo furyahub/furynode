@@ -39,10 +39,10 @@ EOF
 #
 import_mnemonic() {
   if [ "${FURYNODE0_MNEMONIC}" == "${FURYNODE1_MNEMONIC}" ]; then
-    printf "%s\n\n" "${FURYNODE0_MNEMONIC}" | furynoded keys add furynode -i --recover --keyring-backend test
+    printf "%s\n\n" "${FURYNODE0_MNEMONIC}" | furynd keys add furynode -i --recover --keyring-backend test
   else
-    printf "%s\n\n" "${FURYNODE0_MNEMONIC}" | furynoded keys add "${CHAINNET0}" -i --recover --keyring-backend test
-    printf "%s\n\n" "${FURYNODE1_MNEMONIC}" | furynoded keys add "${CHAINNET1}" -i --recover --keyring-backend test
+    printf "%s\n\n" "${FURYNODE0_MNEMONIC}" | furynd keys add "${CHAINNET0}" -i --recover --keyring-backend test
+    printf "%s\n\n" "${FURYNODE1_MNEMONIC}" | furynd keys add "${CHAINNET1}" -i --recover --keyring-backend test
   fi
 }
 
@@ -59,29 +59,29 @@ set_relayer_addrs() {
 #
 txfr_funds() {
   if [ "${FURYNODE0_MNEMONIC}" == "${FURYNODE1_MNEMONIC}" ]; then
-    FROM_ADDR=$(furynoded keys show furynode --keyring-backend test -a)
-    furynoded tx bank send "${FROM_ADDR}" "${RELAYER_CHAINNET0_ADDR}" 100000000000000000000fury \
+    FROM_ADDR=$(furynd keys show furynode --keyring-backend test -a)
+    furynd tx bank send "${FROM_ADDR}" "${RELAYER_CHAINNET0_ADDR}" 100000000000000000000fury \
     --from furynode \
     --gas-prices 0.5fury \
     --keyring-backend test \
     --node tcp://"${RPC0}" \
     --chain-id "${CHAINNET0}" -y
 
-    furynoded tx bank send "${FROM_ADDR}" "${RELAYER_CHAINNET1_ADDR}" 100000000000000000000fury \
+    furynd tx bank send "${FROM_ADDR}" "${RELAYER_CHAINNET1_ADDR}" 100000000000000000000fury \
     --from furynode \
     --gas-prices 0.5fury \
     --keyring-backend test \
     --node tcp://"${RPC1}" \
     --chain-id "${CHAINNET1}" -y
   else
-    furynoded tx bank send $(furynoded keys show "${CHAINNET0}" --keyring-backend test -a) "${RELAYER_CHAINNET0_ADDR}" 100000000000000000000fury \
+    furynd tx bank send $(furynd keys show "${CHAINNET0}" --keyring-backend test -a) "${RELAYER_CHAINNET0_ADDR}" 100000000000000000000fury \
     --from "${CHAINNET0}" \
     --gas-prices 0.5fury \
     --keyring-backend test \
     --node tcp://"${RPC0}" \
     --chain-id "${CHAINNET0}" -y
 
-    furynoded tx bank send $(furynoded keys show "${CHAINNET1}" --keyring-backend test -a) "${RELAYER_CHAINNET1_ADDR}" 100000000000000000000fury \
+    furynd tx bank send $(furynd keys show "${CHAINNET1}" --keyring-backend test -a) "${RELAYER_CHAINNET1_ADDR}" 100000000000000000000fury \
     --from "${CHAINNET1}" \
     --gas-prices 0.5fury \
     --keyring-backend test \

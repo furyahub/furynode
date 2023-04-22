@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp remove-liquidity \
+furynd tx clp remove-liquidity \
   --from $FURY_ACT \
   --keyring-backend test \
   --symbol cusdt \

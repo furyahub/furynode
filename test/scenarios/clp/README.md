@@ -13,7 +13,7 @@ First, intialize a local node from the `furynode` root directory:
 1. Initialize the local chain: `make init`
 2. Decrease the governance voting period time before first start;
 ```bash
-echo "$(jq '.app_state.gov.voting_params.voting_period = "60s"' $HOME/.furynoded/config/genesis.json)" > $HOME/.furynoded/config/genesis.json
+echo "$(jq '.app_state.gov.voting_params.voting_period = "60s"' $HOME/.furynd/config/genesis.json)" > $HOME/.furynd/config/genesis.json
 ```
 3. start the chain: `make run`
 4. Change the working directory `cd test/scenarios/clp`

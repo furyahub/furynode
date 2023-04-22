@@ -29,4 +29,4 @@ ADD cmd/ebrelayer/contract/generated  /fury/cmd/ebrelayer/contract/generated
 
 # Copy the compiled binaires over.
 COPY --from=build /go/bin/ebrelayer /usr/bin/ebrelayer
-COPY --from=build /go/bin/furynoded /usr/bin/furynoded
+COPY --from=build /go/bin/furynd /usr/bin/furynd

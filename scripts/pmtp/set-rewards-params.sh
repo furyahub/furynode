@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp reward-params \
+furynd tx clp reward-params \
   --cancelPeriod 43200 \
   --lockPeriod 100800 \
   --from=$FURY_ACT \
@@ -14,7 +14,7 @@ furynoded tx clp reward-params \
   --broadcast-mode=block \
   -y
 
-# furynoded tx clp reward-params \
+# furynd tx clp reward-params \
 #   --cancelPeriod 66825 \
 #   --lockPeriod 124425 \
 #   --from=$FURY_ACT \
@@ -26,7 +26,7 @@ furynoded tx clp reward-params \
 #   --broadcast-mode=block \
 #   -y
 
-# furynoded tx clp reward-params \
+# furynd tx clp reward-params \
 #   --cancelPeriod 66825 \
 #   --lockPeriod 100800 \
 #   --from=$FURY_ACT \

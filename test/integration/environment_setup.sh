@@ -94,7 +94,7 @@ echo yarn -s --cwd $BASEDIR/smart-contracts \
   --json_path $BASEDIR/smart-contracts/deployments/$DEPLOYMENT_NAME \
   --ethereum_network $ETHEREUM_NETWORK \
 
-furynodecmd=furynoded
+furynodecmd=furynd
 
 echo; echo == furynet balance
 echo $furynodecmd q auth account --node $FURYNODE $FURY_SOURCE

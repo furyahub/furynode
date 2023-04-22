@@ -12,7 +12,7 @@ endif
 
 gofiles=$(shell find ${BASEDIR}/* -name \*.go) ${BASEDIR}/go.mod ${BASEDIR}/go.sum
 
-${GOBIN}/furynoded: $(gofiles)
+${GOBIN}/furynd: $(gofiles)
 	make -C ${BASEDIR} install
 	touch $@
-	rm -rf ~/.furynoded/localnet
+	rm -rf ~/.furynd/localnet

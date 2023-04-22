@@ -13,7 +13,7 @@ make run
 2. Create a pool:
 
 ```bash
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from fury \
   --keyring-backend test \
   --symbol ceth \
@@ -27,7 +27,7 @@ furynoded tx clp create-pool \
 3. Confirm pool has been created:
 
 ```bash
-furynoded q clp pools --output json | jq
+furynd q clp pools --output json | jq
 ```
 
 returns:
@@ -70,7 +70,7 @@ returns:
 4. Query akasha balances:
 
 ```bash
-furynoded q bank balances $(furynoded keys show akasha -a --keyring-backend=test)
+furynd q bank balances $(furynd keys show akasha -a --keyring-backend=test)
 ```
 
 ceth: 500000000000000000000000
@@ -79,7 +79,7 @@ fury: 500000000000000000000000
 5. Query pool share estimation:
 
 ```
-furynoded query clp estimate-pool-share --externalAmount=0 --nativeAmount=1000000000000000000 --symbol ceth --output json
+furynd query clp estimate-pool-share --externalAmount=0 --nativeAmount=1000000000000000000 --symbol ceth --output json
 ```
 
 ```json
@@ -100,7 +100,7 @@ furynoded query clp estimate-pool-share --externalAmount=0 --nativeAmount=100000
 6. Add liquidity asymmetrically from akasha account to the ceth pool
 
 ```bash
-furynoded tx clp add-liquidity \
+furynd tx clp add-liquidity \
   --from akasha \
   --keyring-backend test \
   --symbol ceth \
@@ -114,7 +114,7 @@ furynoded tx clp add-liquidity \
 7. Query akasha balances:
 
 ```
-furynoded q bank balances $(furynoded keys show akasha -a --keyring-backend=test)
+furynd q bank balances $(furynd keys show akasha -a --keyring-backend=test)
 ```
 
 ceth: 500000000000000000000000
@@ -124,13 +124,13 @@ fury: 499998900000000000000000
 8. Query ceth lps:
 
 ```bash
-furynoded q clp lplist ceth
+furynd q clp lplist ceth
 ```
 
 9. Remove the liquidity added by akasha in the previous step
 
 ```bash
-furynoded tx clp remove-liquidity \
+furynd tx clp remove-liquidity \
   --from akasha \
   --keyring-backend test \
   --symbol ceth \
@@ -144,7 +144,7 @@ furynoded tx clp remove-liquidity \
 10. Query akasha balances:
 
 ```bash
-furynoded q bank balances $(furynoded keys show akasha -a --keyring-backend=test)
+furynd q bank balances $(furynd keys show akasha -a --keyring-backend=test)
 ```
 
 ceth: 500000366455407949029238
@@ -189,7 +189,7 @@ from the pool.
 11. Check akash's gains/losses are reflected in the pool balances
 
 ```
-furynoded q clp pool ceth
+furynd q clp pool ceth
 ```
 
 external_asset_balance: "1633544592050970762"
@@ -224,7 +224,7 @@ make run
 13. Recreate the ceth pool
 
 ```bash
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from fury \
   --keyring-backend test \
   --symbol ceth \
@@ -238,7 +238,7 @@ furynoded tx clp create-pool \
 14. Swap 450316888076456144fury for ceth from akasha:
 
 ```bash
-furynoded tx clp swap \
+furynd tx clp swap \
   --from akasha \
   --keyring-backend test \
   --sentSymbol fury \
@@ -253,7 +253,7 @@ furynoded tx clp swap \
 15. Query akasha balances:
 
 ```bash
-furynoded q bank balances $(furynoded keys show akasha -a --keyring-backend=test)
+furynd q bank balances $(furynd keys show akasha -a --keyring-backend=test)
 ```
 
 ceth: 500000366455407949029237

@@ -11,7 +11,7 @@ from furytool.geth import Geth
 from furytool.truffle import Ganache
 from furytool.localnet import Localnet
 from furytool.command import Command
-from furytool.furynet import Furygen, Furynoded, Ebrelayer, furynet_denom_hash, FURY
+from furytool.furynet import Furygen, Furynd, Ebrelayer, furynet_denom_hash, FURY
 from furytool.project import Project, killall, force_kill_processes
 from furytool.common import *
 
@@ -136,32 +136,32 @@ class Integrator(Ganache, Command):
     # Peggy1 only
     def furynet_init_integration(self, furynode, validator_moniker, validator_mnemonic, denom_whitelist_file):
         # now we have to add the validator key to the test keyring so the tests can send fury from validator1
-        furynode0 = Furynoded(self)
+        furynode0 = Furynd(self)
         furynode0.keys_add(validator_moniker, validator_mnemonic)
         valoper = furynode.keys_show(validator_moniker, bech="val")[0]["address"]
         assert valoper == furynode0.get_val_address(validator_moniker)  # This does not use "home"; if it the assertion holds it could be grouped with furynet_init_peggy
 
         # This was deleted in commit f00242302dd226bc9c3060fb78b3de771e3ff429 from furynet_start_daemon.sh because
         # it was not working. But we assume that we want to keep it.
-        furynode.furynoded_exec(["add-genesis-validators", valoper] + furynode._home_args())
+        furynode.furynd_exec(["add-genesis-validators", valoper] + furynode._home_args())
 
-        # Add furynodeadmin to ~/.furynoded
-        furynode0 = Furynoded(self)
+        # Add furynodeadmin to ~/.furynd
+        furynode0 = Furynd(self)
         adminuser_addr = furynode0.keys_add("furynodeadmin")["address"]
         tokens = {FURY: 10 ** 28}
         # Original from peggy:
-        # self.cmd.execst(["furynoded", "add-genesis-account", furynoded_admin_address, "100000000000000000000fury", "--home", furynoded_home])
+        # self.cmd.execst(["furynd", "add-genesis-account", furynd_admin_address, "100000000000000000000fury", "--home", furynd_home])
         furynode.add_genesis_account(adminuser_addr, tokens)
         furynode.set_genesis_oracle_admin(adminuser_addr)
         furynode.set_gen_denom_whitelist(denom_whitelist_file)
 
         return adminuser_addr
 
-    def furynoded_peggy2_init_validator(self, furynode, validator_moniker, validator_mnemonic, evm_network_descriptor, validator_power):
+    def furynd_peggy2_init_validator(self, furynode, validator_moniker, validator_mnemonic, evm_network_descriptor, validator_power):
         # Add validator key to test keyring
-        # This effectively copies key for validator_moniker from what furygen creates in /tmp/furynodedNetwork/validators
-        # to ~/.furynoded (note absence of explicit furynoded_home, therefore it's ~/.furynoded)
-        furynode0 = Furynoded(self)
+        # This effectively copies key for validator_moniker from what furygen creates in /tmp/furyndNetwork/validators
+        # to ~/.furynd (note absence of explicit furynd_home, therefore it's ~/.furynd)
+        furynode0 = Furynd(self)
         # TODO don't add keys to the default ~/ keyring
         furynode0.keys_add(validator_moniker, validator_mnemonic)
 
@@ -194,7 +194,7 @@ class Integrator(Ganache, Command):
     #         netdef_json, validator1_address], env={"USER1ADDR": "nothing"})
 
     def wait_for_fury_account_up(self, address: cosmos.Address, tcp_url: str = None, timeout: int = 90):
-        # TODO Move to Furynoded class
+        # TODO Move to Furynd class
         # TODO Deduplicate: this is also in run_ebrelayer()
         # netdef_json is path to file containing json_dump(netdef)
         # while not self.cmd.tcp_probe_connect("localhost", tendermint_port):
@@ -204,7 +204,7 @@ class Integrator(Ganache, Command):
         # Peggy2
         # How this works: by default, the command below will try to do a POST to http://localhost:26657.
         # So the port has to be up first, but this query will fail anyway if it is not.
-        args = ["furynoded", "query", "account", address] + \
+        args = ["furynd", "query", "account", address] + \
             (["--node", tcp_url] if tcp_url else [])
         last_exception = None
         start_time = time.time()
@@ -234,8 +234,8 @@ class UIStackEnvironment:
         self.network_id = 5777
         self.keyring_backend = "test"
         self.ganache_db_path = self.cmd.get_user_home(".ganachedb")
-        self.furynoded_path = self.cmd.get_user_home(".furynoded")
-        self.furynode = Furynoded(cmd)
+        self.furynd_path = self.cmd.get_user_home(".furynd")
+        self.furynode = Furynd(cmd)
 
         # From ui/chains/credentials.sh
         self.shadowfiend_name = "shadowfiend"
@@ -265,9 +265,9 @@ class UIStackEnvironment:
 
         # yarn stack --save-snapshot -> ui/scripts/stack.sh -> ui/scripts/stack-save-snapshot.sh => ui/scripts/stack-launch.sh
         # ui/scripts/stack-launch.sh -> ui/scripts/_fury-build.sh -> ui/chains/fury/build.sh
-        # killall furynoded
-        # rm $(which furynoded)
-        self.cmd.rmdir(self.furynoded_path)
+        # killall furynd
+        # rm $(which furynd)
+        self.cmd.rmdir(self.furynd_path)
         self.project.make_go_binaries_2()
 
         # ui/scripts/stack-launch.sh -> ui/scripts/_eth.sh -> ui/chains/etc/launch.sh
@@ -277,16 +277,16 @@ class UIStackEnvironment:
         ganache_proc = Ganache.start_ganache_cli(self.cmd, mnemonic=self.ethereum_root_mnemonic, db=self.ganache_db_path,
             port=7545, network_id=self.network_id, gas_price=20000000000, gas_limit=6721975, host=ANY_ADDR)
 
-        furynode = Furynoded(self.cmd)
+        furynode = Furynd(self.cmd)
         # ui/scripts/stack-launch.sh -> ui/scripts/_fury.sh -> ui/chains/fury/launch.sh
-        furynode.furynoded_init("test", self.chain_id)
-        self.cmd.copy_file(project_dir("ui/chains/fury/app.toml"), os.path.join(self.furynoded_path, "config/app.toml"))
+        furynode.furynd_init("test", self.chain_id)
+        self.cmd.copy_file(project_dir("ui/chains/fury/app.toml"), os.path.join(self.furynd_path, "config/app.toml"))
         log.info(f"Generating deterministic account - {self.shadowfiend_name}...")
-        shadowfiend_account = self.cmd.furynoded_keys_add(self.shadowfiend_name, self.shadowfiend_mnemonic)
+        shadowfiend_account = self.cmd.furynd_keys_add(self.shadowfiend_name, self.shadowfiend_mnemonic)
         log.info(f"Generating deterministic account - {self.akasha_name}...")
         akasha_account = self.furynode.keys_add(self.akasha_name, self.akasha_mnemonic)
         log.info(f"Generating deterministic account - {self.juniper_name}...")
-        juniper_account = self.cmd.furynoded_keys_add(self.juniper_name, self.juniper_mnemonic)
+        juniper_account = self.cmd.furynd_keys_add(self.juniper_name, self.juniper_mnemonic)
         shadowfiend_address = shadowfiend_account["address"]
         akasha_address = akasha_account["address"]
         juniper_address = juniper_account["address"]
@@ -302,21 +302,21 @@ class UIStackEnvironment:
         furynode.add_genesis_account(juniper_address, tokens_juniper)
 
         shadowfiend_address_bech_val = furynode.keys_show(self.shadowfiend_name, bech="val")[0]["address"]
-        self.cmd.furynoded_add_genesis_validators(shadowfiend_address_bech_val)
+        self.cmd.furynd_add_genesis_validators(shadowfiend_address_bech_val)
 
         amount = fury_format_amount(10**24, "stake")
-        self.cmd.execst(["furynoded", "gentx", self.shadowfiend_name, amount, f"--chain-id={self.chain_id}",
+        self.cmd.execst(["furynd", "gentx", self.shadowfiend_name, amount, f"--chain-id={self.chain_id}",
             f"--keyring-backend={self.keyring_backend}"])
 
         log.info("Collecting genesis txs...")
-        self.cmd.execst(["furynoded", "collect-gentxs"])
+        self.cmd.execst(["furynd", "collect-gentxs"])
         log.info("Validating genesis file...")
-        self.cmd.execst(["furynoded", "validate-genesis"])
+        self.cmd.execst(["furynd", "validate-genesis"])
 
         log.info("Starting test chain...")
-        furynoded_proc = self.cmd.furynoded_start(minimum_gas_prices=(0.5, FURY))  # TODO furynoded_home=???
+        furynd_proc = self.cmd.furynd_start(minimum_gas_prices=(0.5, FURY))  # TODO furynd_home=???
 
-        # furynoded must be up before continuing
+        # furynd must be up before continuing
         self.cmd.fury_wait_up("localhost", 1317)
 
         # ui/scripts/_migrate.sh -> ui/chains/peggy/migrate.sh
@@ -397,15 +397,15 @@ class UIStackEnvironment:
             bridge_registry_address, self.shadowfiend_name, self.shadowfiend_mnemonic, self.chain_id,
             ethereum_private_key=ethereum_private_key, gas=5*10**12, gas_prices=[0.5, FURY])
 
-        # At this point we have 3 running processes - ganache_proc, furynoded_proc and ebrelayer_proc
+        # At this point we have 3 running processes - ganache_proc, furynd_proc and ebrelayer_proc
         # await fury-node-up and migrate-complete
 
         time.sleep(30)
         # ui/scripts/_snapshot.sh
 
         # ui/scripts/stack-pause.sh:
-        # killall furynoded furynoded ebrelayer ganache-cli
-        furynoded_proc.kill()
+        # killall furynd furynd ebrelayer ganache-cli
+        furynd_proc.kill()
         ebrelayer_proc.kill()
         ganache_proc.kill()
         time.sleep(10)
@@ -419,7 +419,7 @@ class UIStackEnvironment:
         self.cmd.tar_create(project_dir("smart-contracts/build"), os.path.join(snapshots_dir, "peggy_build.tar.gz"))
 
         # ui/chains/fury/snapshot.sh:
-        self.cmd.tar_create(self.furynoded_path, os.path.join(snapshots_dir, "fury.tar.gz"))
+        self.cmd.tar_create(self.furynd_path, os.path.join(snapshots_dir, "fury.tar.gz"))
 
         # ui/chains/etc/snapshot.sh:
         self.cmd.tar_create(self.ganache_db_path, os.path.join(snapshots_dir, "eth.tar.gz"))
@@ -514,7 +514,7 @@ class IntegrationTestsEnvironment:
         log_dir = self.cmd.tmpdir("furynode")
         self.cmd.mkdir(log_dir)
         ganache_log_file = open(os.path.join(log_dir, "ganache.log"), "w")  # TODO close
-        furynoded_log_file = open(os.path.join(log_dir, "furynoded.log"), "w")  # TODO close
+        furynd_log_file = open(os.path.join(log_dir, "furynd.log"), "w")  # TODO close
         ebrelayer_log_file = open(os.path.join(log_dir, "ebrelayer.log"), "w")  # TODO close
 
         # test/integration/ganache-start.sh:
@@ -592,27 +592,27 @@ class IntegrationTestsEnvironment:
         validator1_password = netdef["password"]
         validator1_mnemonic = netdef["mnemonic"].split(" ")
         chaindir = os.path.join(networks_dir, f"validators/{self.chainnet}/{validator1_moniker}")
-        furynoded_home = os.path.join(chaindir, ".furynoded")
+        furynd_home = os.path.join(chaindir, ".furynd")
         denom_whitelist_file = os.path.join(self.test_integration_dir, "whitelisted-denoms.json")
-        # FURYNODED_LOG=$datadir/logs/furynoded.log
+        # FURYND_LOG=$datadir/logs/furynd.log
 
-        furynode = Furynoded(self.cmd, home=furynoded_home)
+        furynode = Furynd(self.cmd, home=furynd_home)
 
         adminuser_addr = self.cmd.furynet_init_integration(furynode, validator1_moniker, validator1_mnemonic,
             denom_whitelist_file)
 
-        # Start furynoded
-        furynoded_proc = furynode.furynoded_start(tcp_url=self.tcp_url, minimum_gas_prices=(0.5, FURY),
-            log_file=furynoded_log_file, trace=True)
+        # Start furynd
+        furynd_proc = furynode.furynd_start(tcp_url=self.tcp_url, minimum_gas_prices=(0.5, FURY),
+            log_file=furynd_log_file, trace=True)
 
-        # TODO: wait for furynoded to come up before continuing
+        # TODO: wait for furynd to come up before continuing
         # in furynet_start_daemon.sh: "sleep 10"
         # in furynet_run_ebrelayer.sh (also run_ebrelayer here) we already wait for connection to port 26657 and fury account validator1_addr
 
         # Removed
         # # TODO Process exits immediately with returncode 1
         # # TODO Why does it not stop start-integration-env.sh?
-        # # rest_server_proc = self.cmd.popen(["furynoded", "rest-server", "--laddr", "tcp://0.0.0.0:1317"])  # TODO cwd
+        # # rest_server_proc = self.cmd.popen(["furynd", "rest-server", "--laddr", "tcp://0.0.0.0:1317"])  # TODO cwd
 
         # test/integration/furynet_start_ebrelayer.sh -> test/integration/furynet_run_ebrelayer.sh
         # This script is also called from tests
@@ -658,14 +658,14 @@ class IntegrationTestsEnvironment:
         from furytool import localnet
         localnet.run_localnet_hook()
 
-        return ganache_proc, furynoded_proc, ebrelayer_proc
+        return ganache_proc, furynd_proc, ebrelayer_proc
 
-    def remove_and_add_furynoded_keys(self, moniker, mnemonic):
+    def remove_and_add_furynd_keys(self, moniker, mnemonic):
         # Error: The specified item could not be found in the keyring
         # This is not neccessary during start-integration-env.sh (as the key does not exist yet), but is neccessary
         # during tests that restart ebrelayer
-        # res = self.cmd.execst(["furynoded", "keys", "delete", moniker, "--keyring-backend", "test"], stdin=["y"])
-        furynode = Furynoded(self.cmd)
+        # res = self.cmd.execst(["furynd", "keys", "delete", moniker, "--keyring-backend", "test"], stdin=["y"])
+        furynode = Furynd(self.cmd)
         furynode.keys_delete(moniker)
         furynode.keys_add(moniker, mnemonic)
 
@@ -688,7 +688,7 @@ class IntegrationTestsEnvironment:
         # self.cmd.wait_for_fury_account(netdef_json, validator1_address)
         self.cmd.wait_for_fury_account_up(validator1_address)
         time.sleep(10)
-        self.remove_and_add_furynoded_keys(validator_moniker, validator_mnemonic)  # Creates ~/.furynoded/keyring-tests/xxxx.address
+        self.remove_and_add_furynd_keys(validator_moniker, validator_mnemonic)  # Creates ~/.furynd/keyring-tests/xxxx.address
         ebrelayer_proc = Ebrelayer(self.cmd).init(self.tcp_url, self.ethereum_websocket_address, bridge_registry_sc_addr,
             validator_moniker, validator_mnemonic, self.chainnet, ethereum_private_key=ebrelayer_ethereum_private_key,
             node=self.tcp_url, keyring_backend="test", sign_with=validator_moniker,
@@ -710,7 +710,7 @@ class IntegrationTestsEnvironment:
         self.cmd.tar_create(self.state_vars["EBRELAYER_DB"], os.path.join(named_snapshot_dir, "furynetrelayerdb.tar.gz"))
         self.cmd.tar_create(project_dir("deploy/networks"), os.path.join(named_snapshot_dir, "networks.tar.gz"))
         self.cmd.tar_create(project_dir("smart-contracts/build"), os.path.join(named_snapshot_dir, "smart-contracts.tar.gz"))
-        self.cmd.tar_create(self.cmd.get_user_home(".furynoded"), os.path.join(named_snapshot_dir, "furynoded.tar.gz"))
+        self.cmd.tar_create(self.cmd.get_user_home(".furynd"), os.path.join(named_snapshot_dir, "furynd.tar.gz"))
         self.cmd.write_text_file(os.path.join(named_snapshot_dir, "vagrantenv.json"), json.dumps(self.state_vars, indent=4))
 
     def restore_snapshot(self, snapshot_name):
@@ -731,7 +731,7 @@ class IntegrationTestsEnvironment:
         extract("networks.tar.gz", deploy_networks_dir)
         smart_contracts_build_dir = project_dir("smart-contracts/build")
         extract("smart-contracts.tar.gz", smart_contracts_build_dir)
-        extract("furynoded.tar.gz", self.cmd.get_user_home(".furynoded"))  # Needed for "--keyring-backend test"
+        extract("furynd.tar.gz", self.cmd.get_user_home(".furynd"))  # Needed for "--keyring-backend test"
 
         state_vars["GANACHE_DB_DIR"] = ganache_db_dir
         state_vars["EBRELAYER_DB"] = relayer_db_path
@@ -754,9 +754,9 @@ class IntegrationTestsEnvironment:
         validator_moniker = self.state_vars["MONIKER"]
         networks_dir = project_dir("deploy/networks")
         chaindir = os.path.join(networks_dir, f"validators/{self.chainnet}/{validator_moniker}")
-        furynoded_home = os.path.join(chaindir, ".furynoded")
-        furynoded_proc = self.cmd.furynoded_start(tcp_url=self.tcp_url, minimum_gas_prices=(0.5, FURY),
-            furynoded_home=furynoded_home, trace=True)
+        furynd_home = os.path.join(chaindir, ".furynd")
+        furynd_proc = self.cmd.furynd_start(tcp_url=self.tcp_url, minimum_gas_prices=(0.5, FURY),
+            furynd_home=furynd_home, trace=True)
 
         bridge_token_sc_addr, bridge_registry_sc_addr, bridge_bank_sc_addr = \
             self.cmd.get_bridge_smart_contract_addresses(self.network_id)
@@ -775,11 +775,11 @@ class IntegrationTestsEnvironment:
         ebrelayer_proc = self.run_ebrelayer(netdef_json, validator1_address, validator_moniker, validator_mnemonic,
             ebrelayer_ethereum_private_key, bridge_registry_sc_addr, relayer_db_path)
 
-        return ganache_proc, furynoded_proc, ebrelayer_proc
+        return ganache_proc, furynd_proc, ebrelayer_proc
 
 
 # Peggy2 environment
-# Originally derived from devenv which ran hardhat, furynoded, ebrelayer like this: cd smart-contracts; GOBIN=~/go/bin npx hardhat run scripts/devenv.ts
+# Originally derived from devenv which ran hardhat, furynd, ebrelayer like this: cd smart-contracts; GOBIN=~/go/bin npx hardhat run scripts/devenv.ts
 class Peggy2Environment(IntegrationTestsEnvironment):
     def __init__(self, cmd: Command, witness_count: int = 1, witness_power: int = 100, consensus_threshold: int = 49,
         ethereum_ws_port: int = 8545, ethereum_chain_id: int = 9999, fury_chain_id = "localnet", use_geth: bool = False
@@ -863,10 +863,10 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         log_dir = self.cmd.tmpdir("furynode")
         self.cmd.mkdir(log_dir)
         hardhat_log_file = open(os.path.join(log_dir, "hardhat.log"), "w")  # TODO close + use a different name
-        furynoded_log_file = open(os.path.join(log_dir, "furynoded.log"), "w")  # TODO close
+        furynd_log_file = open(os.path.join(log_dir, "furynd.log"), "w")  # TODO close
         relayer_log_file = open(os.path.join(log_dir, "relayer.log"), "w")  # TODO close
 
-        self.cmd.rmdir(self.cmd.get_user_home(".furynoded"))  # Purge test keyring backend
+        self.cmd.rmdir(self.cmd.get_user_home(".furynd"))  # Purge test keyring backend
 
         hardhat = Hardhat(self.cmd)
 
@@ -1007,12 +1007,12 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         tendermint_port = 26657
         denom_whitelist_file = project_dir("test", "integration", "whitelisted-denoms.json")
         registry_json = project_dir("smart-contracts", "src", "devenv", "registry.json")
-        furynoded_network_dir = self.cmd.tmpdir("furynodedNetwork")  # Gets written to .vscode/launch.json
-        self.cmd.rmdir(furynoded_network_dir)
-        self.cmd.mkdir(furynoded_network_dir)
-        network_config_file, furynoded_exec_args, furynoded_proc, tcp_url, admin_account_address, furynode_validators, \
+        furynd_network_dir = self.cmd.tmpdir("furyndNetwork")  # Gets written to .vscode/launch.json
+        self.cmd.rmdir(furynd_network_dir)
+        self.cmd.mkdir(furynd_network_dir)
+        network_config_file, furynd_exec_args, furynd_proc, tcp_url, admin_account_address, furynode_validators, \
             furynode_relayers, furynode_witnesses, furynode_validator0_home, chain_dir = \
-                self.init_furynet(furynoded_network_dir, furynoded_log_file, self.validator_mint_amounts,
+                self.init_furynet(furynd_network_dir, furynd_log_file, self.validator_mint_amounts,
                     validator_power, seed_ip_address, tendermint_port, denom_whitelist_file,
                     self.admin_account_mint_amounts, registry_json, admin_account_name, self.ceth_symbol)
 
@@ -1064,12 +1064,12 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         self.write_env_files(self.project.project_dir(), self.project.go_bin_dir, peggy_sc_addrs, hardhat_accounts,
             admin_account_name, admin_account_address, furynode_validator0_home, furynode_validators, furynode_relayers,
             furynode_witnesses, tcp_url, hardhat_bind_hostname, hardhat_port, self.ethereum_chain_id, chain_dir,
-            furynoded_exec_args, relayer0_exec_args, witness_exec_args
+            furynd_exec_args, relayer0_exec_args, witness_exec_args
         )
 
-        return hardhat_proc, furynoded_proc, relayer0_proc, witness_procs
+        return hardhat_proc, furynd_proc, relayer0_proc, witness_procs
 
-    def init_furynet(self, furynoded_network_dir: str, furynoded_log_file: TextIO,
+    def init_furynet(self, furynd_network_dir: str, furynd_log_file: TextIO,
         validator_mint_amounts: cosmos.Balance, validator_power: int, seed_ip_address: str, tendermint_port: int,
         denom_whitelist_file: str, admin_account_mint_amounts: cosmos.Balance, registry_json: str,
         admin_account_name: str, ceth_symbol: str
@@ -1080,7 +1080,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
 
         network_config_file_path = self.cmd.mktempfile()
         try:
-            self.cmd.furygen_create_network(self.chain_id, validator_count, furynoded_network_dir, network_config_file_path,
+            self.cmd.furygen_create_network(self.chain_id, validator_count, furynd_network_dir, network_config_file_path,
                 seed_ip_address, mint_amount=validator_mint_amounts)
             network_config_file = self.cmd.read_text_file(network_config_file_path)
         finally:
@@ -1104,7 +1104,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         #     is_seed: bool
         assert len(validators) == validator_count
 
-        chain_dir_base = os.path.join(furynoded_network_dir, "validators", self.chain_id)
+        chain_dir_base = os.path.join(furynd_network_dir, "validators", self.chain_id)
 
         for validator in validators:
             validator_moniker = validator["moniker"]
@@ -1112,17 +1112,17 @@ class Peggy2Environment(IntegrationTestsEnvironment):
             # TODO Not used
             # validator_password = validator["password"]
             evm_network_descriptor = 1  # TODO Why not hardhat_chain_id?
-            furynoded_home = os.path.join(chain_dir_base, validator_moniker, ".furynoded")
-            furynode = Furynoded(self.cmd, home=furynoded_home)
-            self.cmd.furynoded_peggy2_init_validator(furynode, validator_moniker, validator_mnemonic, evm_network_descriptor, validator_power)
+            furynd_home = os.path.join(chain_dir_base, validator_moniker, ".furynd")
+            furynode = Furynd(self.cmd, home=furynd_home)
+            self.cmd.furynd_peggy2_init_validator(furynode, validator_moniker, validator_mnemonic, evm_network_descriptor, validator_power)
 
         # TODO Needs to be fixed when we support more than 1 validator
         validator0 = exactly_one(validators)
-        validator0_home = os.path.join(chain_dir_base, validator0["moniker"], ".furynoded")
+        validator0_home = os.path.join(chain_dir_base, validator0["moniker"], ".furynd")
         validator0_address = validator0["address"]
         chain_dir = os.path.join(chain_dir_base, validator0["moniker"])
 
-        furynode = Furynoded(self.cmd, home=validator0_home, chain_id=self.chain_id)
+        furynode = Furynd(self.cmd, home=validator0_home, chain_id=self.chain_id)
 
         # Create an ADMIN account on furynode with name admin_account_name (e.g. "furynodeadmin")
         admin_account_address = furynode.peggy2_add_account(admin_account_name, admin_account_mint_amounts, is_admin=True)
@@ -1130,11 +1130,11 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         if self.extra_balances_for_admin_account:
             furynode.add_genesis_account_directly_to_existing_genesis_json({admin_account_address: self.extra_balances_for_admin_account})
 
-        # TODO Check if furynoded_peggy2_add_relayer_witness_account can be executed offline (without furynoded running)
-        # TODO Check if furynoded_peggy2_set_cross_chain_fee can be executed offline (without furynoded running)
+        # TODO Check if furynd_peggy2_add_relayer_witness_account can be executed offline (without furynd running)
+        # TODO Check if furynd_peggy2_set_cross_chain_fee can be executed offline (without furynd running)
 
         # Create an account for each relayer
-        # Note: "--home" is shared with furynoded's "--home"
+        # Note: "--home" is shared with furynd's "--home"
         relayers = [{
             "name": name,
             "address": furynode.peggy2_add_relayer_witness_account(name, admin_account_mint_amounts,
@@ -1143,7 +1143,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         } for name in [f"relayer-{i}" for i in range(relayer_count)]]
 
         # Create an account for each witness
-        # Note: "--home" is shared with furynoded's "--home"
+        # Note: "--home" is shared with furynd's "--home"
         witnesses = [{
             "name": name,
             "address": furynode.peggy2_add_relayer_witness_account(name, admin_account_mint_amounts,
@@ -1154,14 +1154,14 @@ class Peggy2Environment(IntegrationTestsEnvironment):
 
         tcp_url = "tcp://{}:{}".format(ANY_ADDR, tendermint_port)
         gas_prices = (0.5, FURY)
-        # @TODO Detect if furynoded is already running, for now it fails silently and we wait forever in wait_for_fury_account_up
-        furynoded_exec_args = furynode.build_start_cmd(tcp_url=tcp_url, minimum_gas_prices=gas_prices,
+        # @TODO Detect if furynd is already running, for now it fails silently and we wait forever in wait_for_fury_account_up
+        furynd_exec_args = furynode.build_start_cmd(tcp_url=tcp_url, minimum_gas_prices=gas_prices,
             log_format_json=True, log_level="debug")
-        furynoded_proc = self.cmd.spawn_asynchronous_process(furynoded_exec_args, log_file=furynoded_log_file)
+        furynd_proc = self.cmd.spawn_asynchronous_process(furynd_exec_args, log_file=furynd_log_file)
 
         time_before = time.time()
         self.cmd.wait_for_fury_account_up(validator0_address, tcp_url)
-        log.debug("Time for furynoded to come up: {:.2f}s".format(time.time() - time_before))
+        log.debug("Time for furynd to come up: {:.2f}s".format(time.time() - time_before))
 
         # TODO This command exits with status 0, but looks like there are some errros.
         # The same happens also in devenv.
@@ -1191,7 +1191,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         furynode.wait_for_last_transaction_to_be_mined()
         furynode.peggy2_update_consensus_needed(admin_account_address, self.ethereum_chain_id, self.consensus_threshold)
 
-        return network_config_file, furynoded_exec_args, furynoded_proc, tcp_url, admin_account_address, validators, \
+        return network_config_file, furynd_exec_args, furynd_proc, tcp_url, admin_account_address, validators, \
             relayers, witnesses, validator0_home, chain_dir
 
     def start_witnesses_and_relayers(self, web3_websocket_address: str, hardhat_chain_id: int, tcp_url: str,
@@ -1264,7 +1264,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
 
     def write_env_files(self, project_dir, go_bin_dir, evm_smart_contract_addrs, eth_accounts, admin_account_name,
         admin_account_address, furynode_validator0_home, furynode_validators, furynode_relayers, furynode_witnesses,
-        tcp_url, hardhat_bind_hostname, hardhat_port, hardhat_chain_id, chain_dir, furynoded_exec_args,
+        tcp_url, hardhat_bind_hostname, hardhat_port, hardhat_chain_id, chain_dir, furynd_exec_args,
         relayer0_exec_args, witness0_exec_args
     ):
         w3_url = eth.web3_host_port_url(hardhat_bind_hostname, hardhat_port)
@@ -1474,13 +1474,13 @@ class Peggy2Environment(IntegrationTestsEnvironment):
                         "--home", witness["home"]
                     ]
                 } for i, witness in enumerate(furynode_witnesses)], {
-                    "name": "Debug Furynoded",
+                    "name": "Debug Furynd",
                     "type": "go",
                     "request": "launch",
                     "mode": "debug",
-                    "program": "cmd/furynoded",
-                    # Generally we want to use furynoded_exec_args, except for:
-                    # - here we don't have the initial "furynoded"
+                    "program": "cmd/furynd",
+                    # Generally we want to use furynd_exec_args, except for:
+                    # - here we don't have the initial "furynd"
                     # TODO Do not use .env file here
                     "envFile": "${workspaceFolder}/smart-contracts/.env",
                     "args": [
@@ -1539,7 +1539,7 @@ class Peggy2Environment(IntegrationTestsEnvironment):
                 "</component>",
             ]
 
-        intellij_furynoded_configs = []
+        intellij_furynd_configs = []
         intellij_ebrelayer_configs = []
         intellij_witness_configs = []
         for config in launch_json["configurations"]:
@@ -1557,17 +1557,17 @@ class Peggy2Environment(IntegrationTestsEnvironment):
                     "github.com/Furynet/furynode/cmd/ebrelayer",
                     "$PROJECT_DIR$/cmd/ebrelayer/main.go",
                     {"ETHEREUM_PRIVATE_KEY": dot_env["ETHEREUM_PRIVATE_KEY"]}))
-            elif config["name"].startswith("Debug Furynoded"):
-                intellij_furynoded_configs.append(render_intellij_run_xml(
-                    "furynoded devenv",
+            elif config["name"].startswith("Debug Furynd"):
+                intellij_furynd_configs.append(render_intellij_run_xml(
+                    "furynd devenv",
                     " ".join(config["args"]),
-                    "github.com/Furynet/furynode/cmd/furynoded",
-                    "$PROJECT_DIR$/cmd/furynoded/main.go",
+                    "github.com/Furynet/furynode/cmd/furynd",
+                    "$PROJECT_DIR$/cmd/furynd/main.go",
                     {}))
 
         intellij_ebrelayer_config = exactly_one(intellij_ebrelayer_configs)
         intellij_witness_config = intellij_witness_configs[0]
-        intellij_furynoded_config = exactly_one(intellij_furynoded_configs)
+        intellij_furynd_config = exactly_one(intellij_furynd_configs)
 
         run_dir = self.project.project_dir(".run")
         self.cmd.mkdir(run_dir)
@@ -1580,9 +1580,9 @@ class Peggy2Environment(IntegrationTestsEnvironment):
         self.cmd.write_text_file(os.path.join(vscode_dir, "launch.json"), json.dumps(launch_json, indent=2))
         self.cmd.write_text_file(os.path.join(run_dir, "ebrelayer.run.xml"), joinlines(intellij_ebrelayer_config))
         self.cmd.write_text_file(os.path.join(run_dir, "witness.run.xml"), joinlines(intellij_witness_config))
-        self.cmd.write_text_file(os.path.join(run_dir, "furynoded.run.xml"), joinlines(intellij_furynoded_config))
+        self.cmd.write_text_file(os.path.join(run_dir, "furynd.run.xml"), joinlines(intellij_furynd_config))
 
-        return environment_json, dot_env, launch_json, intellij_ebrelayer_config, intellij_witness_config, intellij_furynoded_config
+        return environment_json, dot_env, launch_json, intellij_ebrelayer_config, intellij_witness_config, intellij_furynd_config
 
 
 class IBCEnvironment(IntegrationTestsEnvironment):
@@ -1595,7 +1595,7 @@ class IBCEnvironment(IntegrationTestsEnvironment):
         ipaddr0 = "192.168.65.2"
         ipaddr1 = "192.168.65.3"
         subnet = "192.168.65.1/24"
-        # Mnemonics can be generated with "furygen key generate" or "furynoded keys mnemonic", but that gives us 24 words
+        # Mnemonics can be generated with "furygen key generate" or "furynd keys mnemonic", but that gives us 24 words
         # and here are only 12.
         # A mnemonic contains both public and private key. Public key is the address, there can only be one such entry
         # in the keyring.

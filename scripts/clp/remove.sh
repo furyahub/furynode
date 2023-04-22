@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp remove-liquidity-units \
+furynd tx clp remove-liquidity-units \
   --withdrawUnits 1 \
   --symbol ceth \
   --from $FURY_ACT \

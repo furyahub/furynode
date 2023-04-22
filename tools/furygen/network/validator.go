@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	NodeHomeDir   = ".furynoded"
+	NodeHomeDir   = ".furynd"
 	ConfigDir     = "config"
 	GentxsDir     = "gentxs"
 	ValidatorsDir = "validators"

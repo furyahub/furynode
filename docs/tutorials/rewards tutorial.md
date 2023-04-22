@@ -11,7 +11,7 @@
 
 1. Decrease the governance voting period time before first start;
 ```bash
-echo "$(jq '.app_state.gov.voting_params.voting_period = "60s"' $HOME/.furynoded/config/genesis.json)" > $HOME/.furynoded/config/genesis.json
+echo "$(jq '.app_state.gov.voting_params.voting_period = "60s"' $HOME/.furynd/config/genesis.json)" > $HOME/.furynd/config/genesis.json
 ```
 
 2. Start the chain;
@@ -65,20 +65,20 @@ The param change proposal takes the format:
 
 2. Submit a param change proposal;
 ```bash
-furynoded tx gov submit-proposal param-change rewardsproposal.json --from fury --keyring-backend test --chain-id localnet -y
+furynd tx gov submit-proposal param-change rewardsproposal.json --from fury --keyring-backend test --chain-id localnet -y
 ```
 
 3. Vote on proposal;
 ```bash
-furynoded tx gov vote 1 yes --from fury --chain-id localnet --keyring-backend test -y
+furynd tx gov vote 1 yes --from fury --chain-id localnet --keyring-backend test -y
 ```
 
 4. Query the proposal to check the proposal status has passed;
 ```bash
-furynoded q gov proposals --chain-id localnet
+furynd q gov proposals --chain-id localnet
 ```
 
 5. Verify that the param has changed;
 ```bash
-furynoded q params subspace clp RewardPeriods --chain-id localnet
+furynd q params subspace clp RewardPeriods --chain-id localnet
 ```

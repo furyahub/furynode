@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp add-liquidity \
+furynd tx clp add-liquidity \
   --externalAmount 488436982990 \
   --nativeAmount 96176925423929435353999282 \
   --symbol ceth \

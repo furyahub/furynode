@@ -4,11 +4,11 @@
 
 2. Add a ledger key to the keyring
 ```shell
-furynoded keys add ledger --ledger
+furynd keys add ledger --ledger
 ```
 3. Send a ledger signed transaction
 ```shell
-furynoded tx bank send ledger toAddress 1000fury \
+furynd tx bank send ledger toAddress 1000fury \
   --from ledger \
   --sign-mode amino-json \
   --ledger \

@@ -35,23 +35,23 @@ Key files related to API changes:
 
 CLI commands and related code has undergone various changes, and improvements, including syntax modifications, fixes, and refactoring.
 
-**furynoded** and **furynoded** have been combined into **furynoded** , so all commands previously executed through furynoded are now executed through **furynoded**. Aside from the merge into sidnoded, command syntax remains largely unchanged. The changes to scripts in **scripts/demo** are minimal beyond the shift from furynoded to furynoded.
+**furynd** and **furynd** have been combined into **furynd** , so all commands previously executed through furynd are now executed through **furynd**. Aside from the merge into sidnoded, command syntax remains largely unchanged. The changes to scripts in **scripts/demo** are minimal beyond the shift from furynd to furynd.
 
 Syntax changes:
 
 - **send** tx is now under the **bank** route rather than a root **tx** command
 
-  - **Old:** furynoded tx send [from\_key\_or\_address] [to\_address] [amount] [flags]
-  - **New:** furynoded tx bank send [from\_key\_or\_address] [to\_address] [amount] [flags]
+  - **Old:** furynd tx send [from\_key\_or\_address] [to\_address] [amount] [flags]
+  - **New:** furynd tx bank send [from\_key\_or\_address] [to\_address] [amount] [flags]
 
-Commands are no longer added in **cmd/furynoded/main.go** , each route is now added in the following files:
+Commands are no longer added in **cmd/furynd/main.go** , each route is now added in the following files:
 
-- **cmd/furynoded/cmd/root.go**
-- **cmd/furynoded/cmd/oracle.go**
-- **cmd/furynoded/cmd/migrate.go**
-- **cmd/furynoded/cmd/gentx.go**
-- **cmd/furynoded/cmd/genaccounts.go**
-- **cmd/furynoded/cmd/clpadmin.go**
+- **cmd/furynd/cmd/root.go**
+- **cmd/furynd/cmd/oracle.go**
+- **cmd/furynd/cmd/migrate.go**
+- **cmd/furynd/cmd/gentx.go**
+- **cmd/furynd/cmd/genaccounts.go**
+- **cmd/furynd/cmd/clpadmin.go**
 
 Compatibility changes for each module&#39;s cli can be found in the modules&#39; **x/module_name/client/cli/** directories.
 

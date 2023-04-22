@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Create fury/ceth; 
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
 --symbol ceth \
 --nativeAmount 2000000000000000000 \
 --externalAmount 2000000000000000000 \

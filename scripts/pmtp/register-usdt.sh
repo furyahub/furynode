@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx tokenregistry register denoms/fury.json \
+furynd tx tokenregistry register denoms/fury.json \
   --node ${FURYNODE_NODE} \
   --chain-id "${FURYNODE_CHAIN_ID}" \
   --from "${ADMIN_ADDRESS}" \
@@ -12,7 +12,7 @@ furynoded tx tokenregistry register denoms/fury.json \
   -y \
   --broadcast-mode block
 
-furynoded tx tokenregistry register denoms/cusdt.json \
+furynd tx tokenregistry register denoms/cusdt.json \
   --node ${FURYNODE_NODE} \
   --chain-id "${FURYNODE_CHAIN_ID}" \
   --from "${ADMIN_ADDRESS}" \

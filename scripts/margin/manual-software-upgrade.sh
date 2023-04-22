@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx gov submit-proposal software-upgrade "${NEW_VERSION}" \
+furynd tx gov submit-proposal software-upgrade "${NEW_VERSION}" \
   --from ${FURY_ACT} \
   --deposit "${DEPOSIT}" \
   --upgrade-height "${TARGET_BLOCK}" \

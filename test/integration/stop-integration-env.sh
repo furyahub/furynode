@@ -7,5 +7,5 @@ docker network rm genesis_furynet
 # Image built is untagged at 3.21 GB, this removes them to prevent devouring ones disk space
 docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
 
-pkill furynoded furynoded ebrelayer node bash || true
-rm -rf ~/.furynoded/localnet
+pkill furynd furynd ebrelayer node bash || true
+rm -rf ~/.furynd/localnet

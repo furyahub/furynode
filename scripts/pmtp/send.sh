@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx bank send \
+furynd tx bank send \
     $FURY_ACT \
     fury144w8cpva2xkly74xrms8djg69y3mljzplx3fjt \
     9299999999750930000fury \

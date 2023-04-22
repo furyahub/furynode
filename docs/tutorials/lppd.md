@@ -8,7 +8,7 @@ make run
 2. Create pool - add one million dollars of usdt and price fury at 10c:
 
 ```
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from fury \
   --keyring-backend test \
   --symbol cusdt \
@@ -23,13 +23,13 @@ furynoded tx clp create-pool \
 3. Query the lppd parameters:
 
 ```
-furynoded q clp lppd-params
+furynd q clp lppd-params
 ```
 
 4. Set a new lppd policy:
 
 ```
-furynoded tx clp set-lppd-params \
+furynd tx clp set-lppd-params \
    --from fury \
    --keyring-backend test \
    --chain-id localnet \

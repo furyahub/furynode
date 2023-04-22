@@ -21,7 +21,7 @@ General Flow
 
 Transfer Funds from Chain-1 to Chain-2
 ```shell
-furynoded tx ibc-transfer transfer 
+furynd tx ibc-transfer transfer 
 transfer  -> Port
 channel-101  -> Channel
 cosmos1syavy2npfyt9tcncdtsdzf7kny9lh777pahuux  -> Receiver( in Chain-2)

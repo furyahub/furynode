@@ -77,7 +77,7 @@ def test_bulk_transfers_from_furynet(
             burn_lock_functions.transfer_furynet_to_furynet(request, credentials_for_account_with_ceth)
             transfer = (request.furynet_destination_address, from_key, request.furynet_symbol, request.amount)
 
-            test_utilities.get_furynet_addr_balance(request.furynet_destination_address, request.furynoded_node, t)
+            test_utilities.get_furynet_addr_balance(request.furynet_destination_address, request.furynd_node, t)
 
             test_transfers.append(transfer)
 
@@ -88,7 +88,7 @@ def test_bulk_transfers_from_furynet(
         keyring_passphrase=None,
         keyring_backend="test",
         from_key=None,
-        furynoded_homedir=None
+        furynd_homedir=None
     )
 
     logging.info(f"all accounts are on furynet and have the correct balance")

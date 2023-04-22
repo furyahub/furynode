@@ -43,7 +43,7 @@ make run
 2. Create a pool:
 
 ```bash
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from fury \
   --keyring-backend test \
   --symbol ceth \
@@ -57,7 +57,7 @@ furynoded tx clp create-pool \
 3. Confirm pool has been created:
 
 ```bash
-furynoded q clp pools --output json | jq
+furynd q clp pools --output json | jq
 ```
 
 returns:
@@ -87,7 +87,7 @@ returns:
 4. Query the current swap fee rate:
 
 ```bash
-furynoded q clp swap-fee-rate --output json | jq
+furynd q clp swap-fee-rate --output json | jq
 ```
 
 ```json
@@ -99,7 +99,7 @@ furynoded q clp swap-fee-rate --output json | jq
 5. Do a swap:
 
 ```
-furynoded tx clp swap \
+furynd tx clp swap \
   --from fury \
   --keyring-backend test \
   --sentSymbol ceth \
@@ -117,7 +117,7 @@ This will return a tx hash.
 
 ```bash
 TXHASH=1AB7D2B0C4EDC2B18893334E60BFCF3C3F9587314082D314CA641D895F216E62
-furynoded q tx $TXHASH --output json | jq '.logs[0].events[] | select(.type=="swap_successful").attributes[] | select(.key=="swap_amount" or .key=="liquidity_fee")'
+furynd q tx $TXHASH --output json | jq '.logs[0].events[] | select(.type=="swap_successful").attributes[] | select(.key=="swap_amount" or .key=="liquidity_fee")'
 ```
 
 which returns:
@@ -150,7 +150,7 @@ fee = f * x * Y  / ((x + X)(1 + r))
 7. Check the pool balances
 
 ```bash
-furynoded q clp pools --output json | jq
+furynd q clp pools --output json | jq
 ```
 
 ```json
@@ -174,7 +174,7 @@ external_asset_balance = init_external + x
 8. Change the swap fee rate to 0.01
 
 ```bash
-furynoded tx clp set-swap-fee-rate \
+furynd tx clp set-swap-fee-rate \
   --from fury \
   --swapFeeRate 0.01 \
   --keyring-backend test \
@@ -186,7 +186,7 @@ furynoded tx clp set-swap-fee-rate \
 Confirm the new rate:
 
 ```bash
-furynoded q clp swap-fee-rate --output json | jq
+furynd q clp swap-fee-rate --output json | jq
 ```
 
 ```json
@@ -198,7 +198,7 @@ furynoded q clp swap-fee-rate --output json | jq
 9. Do another swap, this time the other way around (fury to ceth):
 
 ```
-furynoded tx clp swap \
+furynd tx clp swap \
   --from fury \
   --keyring-backend test \
   --sentSymbol fury \
@@ -251,7 +251,7 @@ external_asset_balance = init_external - y
 10. Try to change swap fee > 1. This should fail:
 
 ```
-furynoded tx clp set-swap-fee-rate \
+furynd tx clp set-swap-fee-rate \
   --from fury \
   --swapFeeRate 1.00001 \
   --keyring-backend test \
@@ -267,7 +267,7 @@ Which returns:
 11. Try to change swap fee < 0. This should fail:
 
 ```
-furynoded tx clp set-swap-fee-rate \
+furynd tx clp set-swap-fee-rate \
   --from fury \
   --swapFeeRate -0.0001 \
   --keyring-backend test \

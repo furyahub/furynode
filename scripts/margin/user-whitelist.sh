@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx margin whitelist $(furynoded keys show tester1 --keyring-backend=test -a) \
+furynd tx margin whitelist $(furynd keys show tester1 --keyring-backend=test -a) \
   --from $ADMIN_KEY \
   --keyring-backend test \
   --fees 100000000000000000fury \
@@ -10,7 +10,7 @@ furynoded tx margin whitelist $(furynoded keys show tester1 --keyring-backend=te
   --chain-id $FURYNODE_CHAIN_ID \
   --broadcast-mode block \
   -y
-furynoded tx margin whitelist $(furynoded keys show tester2 --keyring-backend=test -a) \
+furynd tx margin whitelist $(furynd keys show tester2 --keyring-backend=test -a) \
   --from $ADMIN_KEY \
   --keyring-backend test \
   --fees 100000000000000000fury \
@@ -18,7 +18,7 @@ furynoded tx margin whitelist $(furynoded keys show tester2 --keyring-backend=te
   --chain-id $FURYNODE_CHAIN_ID \
   --broadcast-mode block \
   -y
-furynoded tx margin whitelist $(furynoded keys show tester3 --keyring-backend=test -a) \
+furynd tx margin whitelist $(furynd keys show tester3 --keyring-backend=test -a) \
   --from $ADMIN_KEY \
   --keyring-backend test \
   --fees 100000000000000000fury \
@@ -26,7 +26,7 @@ furynoded tx margin whitelist $(furynoded keys show tester3 --keyring-backend=te
   --chain-id $FURYNODE_CHAIN_ID \
   --broadcast-mode block \
   -y
-furynoded tx margin whitelist $(furynoded keys show tester4 --keyring-backend=test -a) \
+furynd tx margin whitelist $(furynd keys show tester4 --keyring-backend=test -a) \
   --from $ADMIN_KEY \
   --keyring-backend test \
   --fees 100000000000000000fury \
@@ -34,7 +34,7 @@ furynoded tx margin whitelist $(furynoded keys show tester4 --keyring-backend=te
   --chain-id $FURYNODE_CHAIN_ID \
   --broadcast-mode block \
   -y
-furynoded tx margin whitelist $(furynoded keys show tester5 --keyring-backend=test -a) \
+furynd tx margin whitelist $(furynd keys show tester5 --keyring-backend=test -a) \
   --from $ADMIN_KEY \
   --keyring-backend test \
   --fees 100000000000000000fury \
@@ -42,7 +42,7 @@ furynoded tx margin whitelist $(furynoded keys show tester5 --keyring-backend=te
   --chain-id $FURYNODE_CHAIN_ID \
   --broadcast-mode block \
   -y
-furynoded tx margin whitelist $(furynoded keys show tester6 --keyring-backend=test -a) \
+furynd tx margin whitelist $(furynd keys show tester6 --keyring-backend=test -a) \
   --from $ADMIN_KEY \
   --keyring-backend test \
   --fees 100000000000000000fury \
@@ -50,7 +50,7 @@ furynoded tx margin whitelist $(furynoded keys show tester6 --keyring-backend=te
   --chain-id $FURYNODE_CHAIN_ID \
   --broadcast-mode block \
   -y
-furynoded tx margin whitelist $(furynoded keys show tester7 --keyring-backend=test -a) \
+furynd tx margin whitelist $(furynd keys show tester7 --keyring-backend=test -a) \
   --from $ADMIN_KEY \
   --keyring-backend test \
   --fees 100000000000000000fury \
@@ -58,7 +58,7 @@ furynoded tx margin whitelist $(furynoded keys show tester7 --keyring-backend=te
   --chain-id $FURYNODE_CHAIN_ID \
   --broadcast-mode block \
   -y
-furynoded tx margin whitelist $(furynoded keys show tester8 --keyring-backend=test -a) \
+furynd tx margin whitelist $(furynd keys show tester8 --keyring-backend=test -a) \
   --from $ADMIN_KEY \
   --keyring-backend test \
   --fees 100000000000000000fury \
@@ -66,7 +66,7 @@ furynoded tx margin whitelist $(furynoded keys show tester8 --keyring-backend=te
   --chain-id $FURYNODE_CHAIN_ID \
   --broadcast-mode block \
   -y
-furynoded tx margin whitelist $(furynoded keys show tester9 --keyring-backend=test -a) \
+furynd tx margin whitelist $(furynd keys show tester9 --keyring-backend=test -a) \
   --from $ADMIN_KEY \
   --keyring-backend test \
   --fees 100000000000000000fury \
@@ -74,7 +74,7 @@ furynoded tx margin whitelist $(furynoded keys show tester9 --keyring-backend=te
   --chain-id $FURYNODE_CHAIN_ID \
   --broadcast-mode block \
   -y
-furynoded tx margin whitelist $(furynoded keys show tester10 --keyring-backend=test -a) \
+furynd tx margin whitelist $(furynd keys show tester10 --keyring-backend=test -a) \
   --from $ADMIN_KEY \
   --keyring-backend test \
   --fees 100000000000000000fury \
@@ -82,7 +82,7 @@ furynoded tx margin whitelist $(furynoded keys show tester10 --keyring-backend=t
   --chain-id $FURYNODE_CHAIN_ID \
   --broadcast-mode block \
   -y
-furynoded tx margin whitelist $(furynoded keys show tester11 --keyring-backend=test -a) \
+furynd tx margin whitelist $(furynd keys show tester11 --keyring-backend=test -a) \
   --from $ADMIN_KEY \
   --keyring-backend test \
   --fees 100000000000000000fury \

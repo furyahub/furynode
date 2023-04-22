@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp set-symmetry-threshold \
+furynd tx clp set-symmetry-threshold \
   --threshold=0.000000005 \
   --from=$FURY_ACT \
   --keyring-backend=test \

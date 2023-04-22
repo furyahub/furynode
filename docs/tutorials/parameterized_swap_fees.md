@@ -12,7 +12,7 @@ make run
 2. Create a pool:
 
 ```bash
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from fury \
   --keyring-backend test \
   --symbol ceth \
@@ -27,7 +27,7 @@ furynoded tx clp create-pool \
 3. Confirm pool has been created:
 
 ```bash
-furynoded q clp pools --output json | jq
+furynd q clp pools --output json | jq
 ```
 
 returns:
@@ -70,7 +70,7 @@ returns:
 4. Query the current swap fee params:
 
 ```bash
-furynoded q clp swap-fee-params --output json | jq
+furynd q clp swap-fee-params --output json | jq
 ```
 
 ```json
@@ -83,7 +83,7 @@ furynoded q clp swap-fee-params --output json | jq
 5. Set new swap fee params
 
 ```bash
-furynoded tx clp set-swap-fee-params \
+furynd tx clp set-swap-fee-params \
    --from fury \
    --keyring-backend test \
    --chain-id localnet \
@@ -108,7 +108,7 @@ furynoded tx clp set-swap-fee-params \
 6. Check swap fee params have been updated:
 
 ```bash
-furynoded q clp swap-fee-params --output json | jq
+furynd q clp swap-fee-params --output json | jq
 ```
 
 ```json
@@ -132,7 +132,7 @@ furynoded q clp swap-fee-params --output json | jq
 7. Do a swap:
 
 ```bash
-furynoded tx clp swap \
+furynd tx clp swap \
   --from fury \
   --keyring-backend test \
   --sentSymbol ceth \
@@ -181,7 +181,7 @@ Which match the vales returned by the swap command.
 8. Confirm that setting swap fee rate greater than one fails:
 
 ```bash
-furynoded tx clp set-swap-fee-params \
+furynd tx clp set-swap-fee-params \
    --from fury \
    --keyring-backend test \
    --chain-id localnet \

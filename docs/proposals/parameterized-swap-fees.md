@@ -54,7 +54,7 @@ There are no new events or updates to existing events.
 ### Setting
 
 ```bash
-furynoded tx clp set-swap-fee-params \
+furynd tx clp set-swap-fee-params \
   --from fury \
   --path ./swap-fee-params.json \
   --keyring-backend test \
@@ -86,7 +86,7 @@ furynoded tx clp set-swap-fee-params \
 ### Querying
 
 ```bash
-furynoded q clp swap-fee-params --output json
+furynd q clp swap-fee-params --output json
 ```
 
 ```json

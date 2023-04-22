@@ -25,6 +25,6 @@ ENV PACKAGES curl jq bind-tools expect nodejs npm
 
 RUN apk add --update --no-cache $PACKAGES
 
-COPY --from=build /go/bin/furynoded /usr/bin/furynoded
+COPY --from=build /go/bin/furynd /usr/bin/furynd
 
 RUN npm i -g @confio/relayer@main

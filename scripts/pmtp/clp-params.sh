@@ -2,6 +2,6 @@
 
 set -x
 
-furynoded q clp params \
+furynd q clp params \
   --node ${FURYNODE_NODE} \
   --chain-id $FURYNODE_CHAIN_ID

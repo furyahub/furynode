@@ -23,7 +23,7 @@ type CreateClaimReq struct {
 (This step can be done through CLI on friday , or process events throughout the week . Processing events would be the preferred approach)
 This query through the cli would look like
 ```shell
-furynoded q dispensation claims-by-type ValidatorSubsidy --chain-id furynet --node tcp://rpc.furynet.finance:80
+furynd q dispensation claims-by-type ValidatorSubsidy --chain-id furynet --node tcp://rpc.furynet.finance:80
 ```
 Which returns 
 ```json
@@ -114,15 +114,15 @@ After parsing should become
 
 ### This file is then used to create a distribution
 ```shell
-furynoded tx dispensation create mkey ar1 ValidatorSubsidy input.json output.json --gas 200064128 --generate-only >> offlinetx.json
+furynd tx dispensation create mkey ar1 ValidatorSubsidy input.json output.json --gas 200064128 --generate-only >> offlinetx.json
 # First user signs
-furynoded tx sign --multisig $(furynoded keys show mkey -a) --from $(furynoded keys show fury -a)  offlinetx.json >> sig1.json
+furynd tx sign --multisig $(furynd keys show mkey -a) --from $(furynd keys show fury -a)  offlinetx.json >> sig1.json
 # Second user signs
-furynoded tx sign --multisig $(furynoded keys show mkey -a) --from $(furynoded keys show akasha -a)  offlinetx.json >> sig2.json
+furynd tx sign --multisig $(furynd keys show mkey -a) --from $(furynd keys show akasha -a)  offlinetx.json >> sig2.json
 # Multisign created from the above signatures
-furynoded tx multisign offlinetx.json mkey sig1.json sig2.json >> signedtx.json
+furynd tx multisign offlinetx.json mkey sig1.json sig2.json >> signedtx.json
 # transaction broadcast , distribution happens
-furynoded tx broadcast signedtx.json
+furynd tx broadcast signedtx.json
 ```
 ### Post Dispensation
 - Suppose we do the dispensation at height X , The block results should contain this event 

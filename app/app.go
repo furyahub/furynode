@@ -122,7 +122,7 @@ import (
 const appName = "furynode"
 
 var (
-	DefaultNodeHome = os.ExpandEnv("$HOME/.furynoded")
+	DefaultNodeHome = os.ExpandEnv("$HOME/.furynd")
 
 	ModuleBasics = module.NewBasicManager(genutil.AppModuleBasic{},
 		auth.AppModuleBasic{},

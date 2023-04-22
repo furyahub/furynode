@@ -3,7 +3,7 @@ For reference when playing with cosmos cain
 # Create liquidity pool catk:fury
 
 ```
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
  --from akasha \
  --symbol catk \
  --nativeAmount 500 \
@@ -13,7 +13,7 @@ furynoded tx clp create-pool \
 # Create liquidity pool cbtk:fury
 
 ```
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
  --from akasha \
  --symbol cbtk \
  --nativeAmount 500 \
@@ -23,13 +23,13 @@ furynoded tx clp create-pool \
 # Verify pool created
 
 ```
-furynoded query clp pools
+furynd query clp pools
 ```
 
 # Execute swap
 
 ```
-furynoded tx clp swap \
+furynd tx clp swap \
  --from shadowfiend \
  --sentSymbol catk \
  --receivedSymbol cbtk \

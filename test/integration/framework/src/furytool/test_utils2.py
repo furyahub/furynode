@@ -73,10 +73,10 @@ class PredefinedWallets:
 
     @staticmethod
     def create(cmd: command.Command, count: int, path: str):
-        furynoded = furynet.Furynoded(cmd, home=path)
+        furynd = furynet.Furynd(cmd, home=path)
         entries = []
         for i in range(count):
-            account, mnemonic = furynoded._keys_add("test-{}".format(i))
+            account, mnemonic = furynd._keys_add("test-{}".format(i))
             addr = account["address"]
             entries.append(addr)
             entries.append(" ".join(mnemonic))

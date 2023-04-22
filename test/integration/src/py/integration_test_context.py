@@ -30,7 +30,7 @@ class IntegrationTestContext:
         )
 
     @property
-    def furynoded_node(self):
+    def furynd_node(self):
         return self.get_optional_var("FURYNODE", None)
 
     @property
@@ -54,7 +54,7 @@ class IntegrationTestContext:
     @property
     def is_ropsten_testnet(self):
         """if furynode_clinode is set, we're talking to ropsten/sandpit"""
-        return bool(self.furynoded_node)
+        return bool(self.furynd_node)
 
     @property
     def ethereum_network_id(self):
@@ -82,19 +82,19 @@ class IntegrationTestContext:
         """true if we're using ganache"""
         return not self.ethereum_network
 
-    # Deprecated: furynoded accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
+    # Deprecated: furynd accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
     # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
     # See https://github.com/Furynet/furynode/pull/1802#discussion_r697403408
     @property
     def furynet_fees_int(self):
         return 100000000000000000
 
-    # Deprecated: furynoded accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
+    # Deprecated: furynd accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
     # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
     # See https://github.com/Furynet/furynode/pull/1802#discussion_r697403408
     @property
     def furynet_fees(self):
-        """returns a string suitable for passing to furynoded"""
+        """returns a string suitable for passing to furynd"""
         return f"{self.furynet_fees_int}fury"
 
     @property
@@ -147,12 +147,12 @@ class IntegrationTestContext:
             return result
 
     @property
-    def furynoded_homedir(self):
+    def furynd_homedir(self):
         if self.is_ropsten_testnet:
             base = self.get_required_var("HOME")
         else:
             base = self.get_required_var("CHAINDIR")
-        result = f"""{base}/.furynoded"""
+        result = f"""{base}/.furynd"""
         return result
 
     @property
@@ -208,7 +208,7 @@ class IntegrationTestContext:
             bridgebank_address=self.bridgebank_address,
             bridgetoken_address=self.bridgetoken_address,
             ethereum_network=self.ethereum_network,
-            furynoded_node=self.furynoded_node,
+            furynd_node=self.furynd_node,
             manual_block_advance=self.is_ganache,
             chain_id=self.chain_id,
             furynet_fees=self.furynet_fees,

@@ -3,7 +3,7 @@
 From the root of the repo run the following commands:
 
 ```
-rm -rf ~/furynoded
+rm -rf ~/furynd
 make install
 ./scripts/init_w_prod_tokens.sh
 ```
@@ -70,8 +70,8 @@ furygen node create furynet-1 furynode1 "connect rocket hat athlete kind fall au
 Setup cosmovisor:
 
 ```
-export DAEMON_NAME=furynoded
-export DAEMON_HOME=$HOME/.furynoded
+export DAEMON_NAME=furynd
+export DAEMON_HOME=$HOME/.furynd
 export DAEMON_ALLOW_DOWNLOAD_BINARIES=true
 export DAEMON_RESTART_AFTER_UPGRADE=true
 export UNSAFE_SKIP_BACKUP=true

@@ -1,5 +1,5 @@
 CHAINNET?=betanet
-BINARY?=furynoded
+BINARY?=furynd
 GOPATH?=$(shell go env GOPATH)
 GOBIN?=$(GOPATH)/bin
 NOW=$(shell date +'%Y-%m-%d_%T')
@@ -14,14 +14,14 @@ GOFLAGS:=""
 GOTAGS:=ledger
 
 ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=furynet \
-		  -X github.com/cosmos/cosmos-sdk/version.ServerName=furynoded \
-		  -X github.com/cosmos/cosmos-sdk/version.ClientName=furynoded \
+		  -X github.com/cosmos/cosmos-sdk/version.ServerName=furynd \
+		  -X github.com/cosmos/cosmos-sdk/version.ClientName=furynd \
 		  -X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
 		  -X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT)
 
 BUILD_FLAGS := -ldflags '$(ldflags)' -tags '$(GOTAGS)' -buildvcs=false
 
-BINARIES=./cmd/furynoded ./cmd/furygen ./cmd/ebrelayer ./cmd/furytest
+BINARIES=./cmd/furynd ./cmd/furygen ./cmd/ebrelayer ./cmd/furytest
 
 all: lint install
 
@@ -33,7 +33,7 @@ init:
 	./scripts/init.sh
 
 start:
-	furynoded start
+	furynd start
 
 lint-pre:
 	@test -z $(gofmt -l .)
@@ -49,7 +49,7 @@ install: go.sum
 	GOFLAGS=$(GOFLAGS) go install $(BUILD_FLAGS) $(BINARIES)
 
 build-furyd: go.sum
-	GOFLAGS=$(GOFLAGS) go build  $(BUILD_FLAGS) ./cmd/furynoded
+	GOFLAGS=$(GOFLAGS) go build  $(BUILD_FLAGS) ./cmd/furynd
 
 clean:
 	@rm -rf $(GOBIN)/fury*
@@ -64,7 +64,7 @@ feature-tests:
 	@GOFLAGS=$(GOFLAGS) go test -v ./test/bdd --godog.format=pretty --godog.random -race -coverprofile=.coverage.txt
 
 run:
-	GOFLAGS=$(GOFLAGS) go run ./cmd/furynoded start
+	GOFLAGS=$(GOFLAGS) go run ./cmd/furynd start
 
 build-image:
 	docker build -t furynet/$(BINARY):$(IMAGE_TAG) -f ./cmd/$(BINARY)/Dockerfile .

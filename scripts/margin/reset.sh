@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp pmtp-rates \
+furynd tx clp pmtp-rates \
   --blockRate=0.00 \
   --runningRate=0.00 \
   --from=$FURY_ACT \

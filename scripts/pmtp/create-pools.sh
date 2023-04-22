@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from $FURY_ACT \
   --keyring-backend test \
   --symbol ceth \
@@ -14,7 +14,7 @@ furynoded tx clp create-pool \
   --broadcast-mode block \
   -y
 
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from $FURY_ACT \
   --keyring-backend test \
   --symbol cusdc \
@@ -26,7 +26,7 @@ furynoded tx clp create-pool \
   --broadcast-mode block \
   -y
 
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from $FURY_ACT \
   --keyring-backend test \
   --symbol cusdt \
@@ -38,7 +38,7 @@ furynoded tx clp create-pool \
   --broadcast-mode block \
   -y
 
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from $FURY_ACT \
   --keyring-backend test \
   --symbol ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2 \
@@ -50,7 +50,7 @@ furynoded tx clp create-pool \
   --broadcast-mode block \
   -y
 
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from $FURY_ACT \
   --keyring-backend test \
   --symbol ibc/F279AB967042CAC10BFF70FAECB179DCE37AAAE4CD4C1BC4565C2BBC383BC0FA \
@@ -62,7 +62,7 @@ furynoded tx clp create-pool \
   --broadcast-mode block \
   -y
 
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from $FURY_ACT \
   --keyring-backend test \
   --symbol ibc/F141935FF02B74BDC6B8A0BD6FE86A23EE25D10E89AA0CD9158B3D92B63FDF4D \

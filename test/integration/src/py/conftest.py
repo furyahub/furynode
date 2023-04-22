@@ -95,12 +95,12 @@ def solidity_json_path(smart_contracts_dir):
 
 
 @pytest.fixture
-def furynoded_homedir(is_ropsten_testnet):
+def furynd_homedir(is_ropsten_testnet):
     if is_ropsten_testnet:
         base = test_utilities.get_required_env_var("HOME")
     else:
         base = test_utilities.get_required_env_var("CHAINDIR")
-    result = f"""{base}/.furynoded"""
+    result = f"""{base}/.furynd"""
     return result
 
 
@@ -131,7 +131,7 @@ def fury_source_key(is_ropsten_testnet, fury_source):
 
 
 @pytest.fixture
-def furynoded_node():
+def furynd_node():
     return test_utilities.get_optional_env_var("FURYNODE", None)
 
 
@@ -168,9 +168,9 @@ def ropsten_wait_time():
 
 
 @pytest.fixture
-def is_ropsten_testnet(furynoded_node):
+def is_ropsten_testnet(furynd_node):
     """if furynode_clinode is set, we're talking to ropsten/sandpit"""
-    return furynoded_node
+    return furynd_node
 
 
 @pytest.fixture
@@ -179,16 +179,16 @@ def is_ganache(ethereum_network):
     return not ethereum_network
 
 
-# Deprecated: furynoded accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
+# Deprecated: furynd accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
 # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
 # See https://github.com/Furynet/furynode/pull/1802#discussion_r697403408
 @pytest.fixture
 def furynet_fees(furynet_fees_int):
-    """returns a string suitable for passing to furynoded"""
+    """returns a string suitable for passing to furynd"""
     return f"{furynet_fees_int}fury"
 
 
-# Deprecated: furynoded accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
+# Deprecated: furynd accepts --gas-prices=0.5fury along with --gas-adjustment=1.5 instead of a fixed fee.
 # Using those parameters is the best way to have the fees set robustly after the .42 upgrade.
 # See https://github.com/Furynet/furynode/pull/1802#discussion_r697403408
 @pytest.fixture
@@ -268,7 +268,7 @@ def basic_transfer_request(
         bridgebank_address,
         bridgetoken_address,
         ethereum_network,
-        furynoded_node,
+        furynd_node,
         chain_id,
         furynet_fees,
         solidity_json_path,
@@ -283,7 +283,7 @@ def basic_transfer_request(
         bridgebank_address=bridgebank_address,
         bridgetoken_address=bridgetoken_address,
         ethereum_network=ethereum_network,
-        furynoded_node=furynoded_node,
+        furynd_node=furynd_node,
         manual_block_advance=is_ganache,
         chain_id=chain_id,
         furynet_fees=furynet_fees,
@@ -293,7 +293,7 @@ def basic_transfer_request(
 
 @pytest.fixture(scope="function")
 def fury_source_integrationtest_env_credentials(
-        furynoded_homedir,
+        furynd_homedir,
         validator_password,
         fury_source_key,
         is_ganache,

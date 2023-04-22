@@ -14,7 +14,7 @@ setup() {
 # Run the node under cosmovisor.
 #
 run() {
-  furynoded start --rpc.laddr=tcp://0.0.0.0:26657 --minimum-gas-prices="$GAS_PRICE"
+  furynd start --rpc.laddr=tcp://0.0.0.0:26657 --minimum-gas-prices="$GAS_PRICE"
 }
 
 setup

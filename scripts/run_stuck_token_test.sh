@@ -1,9 +1,9 @@
 #!/bin/zsh
 
-echo "initializing furynoded and doing initial IBC transfers"
+echo "initializing furynd and doing initial IBC transfers"
 scripts/init-multichain.sh > /dev/null 2>&1
 scripts/do_ibc_transfers.sh > /dev/null 2>&1
-echo "killing furynoded"
+echo "killing furynd"
 ps auxww | grep furynode-1 | egrep -v grep | awk '{ print $2 }' | xargs kill
 sleep 60
 echo "killing hermes"
@@ -23,7 +23,7 @@ echo "sleeping to let the localnet-1 expire"
 sleep 850
 
 echo "restarting localnet-1"
-furynoded start --home ~/.furynode-1 --p2p.laddr 0.0.0.0:27655 --grpc.address 0.0.0.0:9090 --grpc-web.address 0.0.0.0:9093 --address tcp://0.0.0.0:27659 --rpc.laddr tcp://127.0.0.1:27665 >> abci_1.log 2>&1 &
+furynd start --home ~/.furynode-1 --p2p.laddr 0.0.0.0:27655 --grpc.address 0.0.0.0:9090 --grpc-web.address 0.0.0.0:9093 --address tcp://0.0.0.0:27659 --rpc.laddr tcp://127.0.0.1:27665 >> abci_1.log 2>&1 &
 sleep 10
 
 echo "bouncing hermes"
@@ -49,24 +49,24 @@ scripts/create_clonable_hermes_channels.sh > /dev/null 2>&1
 
 echo "Current Fury balances"
 echo "localnet-1"
-furynoded q bank balances $(furynoded keys show fury -a --keyring-backend=test --home ~/.furynode-1) --node tcp://127.0.0.1:27665
+furynd q bank balances $(furynd keys show fury -a --keyring-backend=test --home ~/.furynode-1) --node tcp://127.0.0.1:27665
 echo ""
 echo "localnet-2"
-furynoded q bank balances $(furynoded keys show fury -a --keyring-backend=test --home ~/.furynode-1) --node tcp://127.0.0.1:27666
+furynd q bank balances $(furynd keys show fury -a --keyring-backend=test --home ~/.furynode-1) --node tcp://127.0.0.1:27666
 echo ""
 echo "localnet-3"
-furynoded q bank balances $(furynoded keys show fury -a --keyring-backend=test --home ~/.furynode-1) --node tcp://127.0.0.1:27667
+furynd q bank balances $(furynd keys show fury -a --keyring-backend=test --home ~/.furynode-1) --node tcp://127.0.0.1:27667
 echo ""
 
 echo "Current Akasha balances"
 echo "localnet-1"
-furynoded q bank balances $(furynoded keys show akasha -a --keyring-backend=test --home ~/.furynode-1) --node tcp://127.0.0.1:27665
+furynd q bank balances $(furynd keys show akasha -a --keyring-backend=test --home ~/.furynode-1) --node tcp://127.0.0.1:27665
 echo ""
 echo "localnet-2"
-furynoded q bank balances $(furynoded keys show akasha -a --keyring-backend=test --home ~/.furynode-1) --node tcp://127.0.0.1:27666
+furynd q bank balances $(furynd keys show akasha -a --keyring-backend=test --home ~/.furynode-1) --node tcp://127.0.0.1:27666
 echo ""
 echo "localnet-3"
-furynoded q bank balances $(furynoded keys show akasha -a --keyring-backend=test --home ~/.furynode-1) --node tcp://127.0.0.1:27667
+furynd q bank balances $(furynd keys show akasha -a --keyring-backend=test --home ~/.furynode-1) --node tcp://127.0.0.1:27667
 echo ""
 
 echo "voting on proposals"

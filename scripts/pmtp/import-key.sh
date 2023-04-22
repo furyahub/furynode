@@ -2,4 +2,4 @@
 
 set -x
 
-echo ${ADMIN_MNEMONIC} | furynoded keys add ${FURY_ACT} --recover --keyring-backend=test
+echo ${ADMIN_MNEMONIC} | furynd keys add ${FURY_ACT} --recover --keyring-backend=test

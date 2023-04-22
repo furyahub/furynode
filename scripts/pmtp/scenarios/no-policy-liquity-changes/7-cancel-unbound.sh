@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp cancel-unbond \
+furynd tx clp cancel-unbond \
   --from $FURY_ACT \
   --keyring-backend test \
   --symbol cusdt \

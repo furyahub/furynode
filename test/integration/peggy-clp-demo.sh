@@ -4,93 +4,93 @@
 echo "Minting peggyeth ( minted from Peggy) using ethbridge"
 ## Case 1
 ## 1. send tx to cosmos after get the lock event in ethereum
-furynoded tx ethbridge create-claim 0x30753E4A8aad7F8597332E813735Def5dD395028 3 eth 0x11111111262b236c9ac9a9a8c8e4276b5cf6b2c9 \
-$(furynoded keys show user2 -a) $(furynoded keys show user1 -a --bech val) 10000 lock \
+furynd tx ethbridge create-claim 0x30753E4A8aad7F8597332E813735Def5dD395028 3 eth 0x11111111262b236c9ac9a9a8c8e4276b5cf6b2c9 \
+$(furynd keys show user2 -a) $(furynd keys show user1 -a --bech val) 10000 lock \
 --token-contract-address=0x0000000000000000000000000000000000000000 --ethereum-chain-id=3 --from=user1 --yes
 
 # 2. query the tx
-#furynoded q tx
+#furynd q tx
 
 # 3. check user2 account balance
-furynoded q auth account $(furynoded keys show user2 -a)
+furynd q auth account $(furynd keys show user2 -a)
 
 # 4. query the prophecy
-furynoded query ethbridge prophecy 0x30753E4A8aad7F8597332E813735Def5dD395028 3 eth 0x11111111262b236c9ac9a9a8c8e4276b5cf6b2c9 --ethereum-chain-id=3 --token-contract-address=0x0000000000000000000000000000000000000000
+furynd query ethbridge prophecy 0x30753E4A8aad7F8597332E813735Def5dD395028 3 eth 0x11111111262b236c9ac9a9a8c8e4276b5cf6b2c9 --ethereum-chain-id=3 --token-contract-address=0x0000000000000000000000000000000000000000
 
 ## Case 2
 ## 1. burn peggyetch for user2
-furynoded tx ethbridge burn $(furynoded keys show user2 -a) 0x11111111262b236c9ac9a9a8c8e4276b5cf6b2c9 \
+furynd tx ethbridge burn $(furynd keys show user2 -a) 0x11111111262b236c9ac9a9a8c8e4276b5cf6b2c9 \
 10 ceth --ethereum-chain-id=3 --from=user2 --yes
 
 ## 2. query the tx
-#furynoded q tx
+#furynd q tx
 
 ## 3. check user2 account balance
-furynoded q auth account $(furynoded keys show user2 -a)
+furynd q auth account $(furynd keys show user2 -a)
 
 ## Case 3
 ## 1. lock user2 rwn in furynet
-furynoded tx ethbridge lock $(furynoded keys show user2 -a) 0x11111111262b236c9ac9a9a8c8e4276b5cf6b2c9 \
+furynd tx ethbridge lock $(furynd keys show user2 -a) 0x11111111262b236c9ac9a9a8c8e4276b5cf6b2c9 \
 10 rwn  --ethereum-chain-id=3 --from=user2 --yes
 
 ## 2. query the tx
-#furynoded q tx
+#furynd q tx
 
 ## 3. check user2 account balance
-furynoded q auth account $(furynoded keys show user2 -a)
+furynd q auth account $(furynd keys show user2 -a)
 
 ## Case 4
 ## 1. send tx to cosmos after erwn burn in ethereum
-furynoded tx ethbridge create-claim 0x30753E4A8aad7F8597332E813735Def5dD395028 1 rwn 0x11111111262b236c9ac9a9a8c8e4276b5cf6b2c9 \
-$(furynoded keys show user2 -a) $(furynoded keys show user1 -a --bech val) \
+furynd tx ethbridge create-claim 0x30753E4A8aad7F8597332E813735Def5dD395028 1 rwn 0x11111111262b236c9ac9a9a8c8e4276b5cf6b2c9 \
+$(furynd keys show user2 -a) $(furynd keys show user1 -a --bech val) \
 10 burn --ethereum-chain-id=3 --token-contract-address=0x345cA3e014Aaf5dcA488057592ee47305D9B3e10 --from=user1 --yes
 
 ## 2. query the tx
-#furynoded q tx
+#furynd q tx
 
 ## 3. check user2 account balance
-furynoded q auth account $(furynoded keys show user2 -a)
+furynd q auth account $(furynd keys show user2 -a)
 
 
 echo "Creating pools for peggyeth ( minted from Peggy) and cdash"
 sleep 8
-yes Y | furynoded tx clp create-pool --from user2 --symbol ceth --nativeAmount 200 --externalAmount 200
+yes Y | furynd tx clp create-pool --from user2 --symbol ceth --nativeAmount 200 --externalAmount 200
 sleep 8
-yes Y | furynoded tx clp create-pool --from user2 --symbol cdash --nativeAmount 100 --externalAmount 100
+yes Y | furynd tx clp create-pool --from user2 --symbol cdash --nativeAmount 100 --externalAmount 100
 
 echo "Query all pools"
 sleep 8
-furynoded query clp pools
+furynd query clp pools
 
 echo "Query specific pool"
 sleep 8
-furynoded query clp pool ceth
+furynd query clp pool ceth
 
 echo "Query Liquidity Provider / Pool creator is the first lp for the pool"
 sleep 8
-furynoded query clp lp ceth $(furynoded keys show user2 -a)
+furynd query clp lp ceth $(furynd keys show user2 -a)
 
 echo "adding more liquidity"
 sleep 8
-yes Y | furynoded tx clp add-liquidity --from user2 --symbol ceth --nativeAmount 1 --externalAmount 1
+yes Y | furynd tx clp add-liquidity --from user2 --symbol ceth --nativeAmount 1 --externalAmount 1
 
 echo "swap"
 sleep 8
-yes Y |  furynoded tx clp swap --from user2 --sentSymbol ceth --receivedSymbol cdash --sentAmount 20 ---minReceivingAmount 0
+yes Y |  furynd tx clp swap --from user2 --sentSymbol ceth --receivedSymbol cdash --sentAmount 20 ---minReceivingAmount 0
 
 
 echo "removing Liquidity"
 sleep 8
-yes Y | furynoded tx clp remove-liquidity --from user2 --symbol ceth --wBasis 5001 --asymmetry -1
+yes Y | furynd tx clp remove-liquidity --from user2 --symbol ceth --wBasis 5001 --asymmetry -1
 
 echo "removing more Liquidity"
 sleep 8
-yes Y | furynoded tx clp remove-liquidity --from user2 --symbol ceth --wBasis 5001 --asymmetry -1
+yes Y | furynd tx clp remove-liquidity --from user2 --symbol ceth --wBasis 5001 --asymmetry -1
 
 
 
 echo "decommission pool"
 sleep 8
-yes Y | furynoded tx clp decommission-pool --from user2 --symbol ceth
+yes Y | furynd tx clp decommission-pool --from user2 --symbol ceth
 
-echo "furynoded query clp pools -> should list both pools / Decommission can only be done by admin users"
+echo "furynd query clp pools -> should list both pools / Decommission can only be done by admin users"

@@ -38,7 +38,7 @@ RUN apk update && apk add curl jq bash
 
 # Copy the compiled binaires over.
 COPY --from=build-go /go/bin/ebrelayer /usr/bin/ebrelayer
-COPY --from=build-go /go/bin/furynoded /usr/bin/furynoded
+COPY --from=build-go /go/bin/furynd /usr/bin/furynd
 COPY --from=build-go /go/bin/furygen /usr/bin/furygen
 
 # Required for ebrelayer

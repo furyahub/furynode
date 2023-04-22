@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx margin update-pools ./pools.json \
+furynd tx margin update-pools ./pools.json \
   --closed-pools ./closed-pools.json \
   --from=$FURY_ACT \
   --keyring-backend=test \

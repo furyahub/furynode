@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp swap \
+furynd tx clp swap \
   --from $FURY_ACT \
   --keyring-backend test \
   --sentSymbol fury \

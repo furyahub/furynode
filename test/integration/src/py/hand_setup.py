@@ -45,10 +45,10 @@ def build_request() -> (EthereumToFurynetTransferRequest, FurynetcliCredentials)
 
 # if there's an existing user1 key, just remove it.  Otherwise, adding a duplicate key will just hang
 try:
-    test_utilities.get_shell_output(f"furynoded keys delete user1 --home /home/vagrant/.furynoded --keyring-backend test -o json")
+    test_utilities.get_shell_output(f"furynd keys delete user1 --home /home/vagrant/.furynd --keyring-backend test -o json")
 except:
     logging.debug("no key to delete, this is normal in a fresh environment")
 request, credentials = build_request()
 burn_lock_functions.transfer_ethereum_to_furynet(request)
-test_utilities.get_furynet_addr_balance(request.furynet_address, request.furynoded_node, "ceth")
+test_utilities.get_furynet_addr_balance(request.furynet_address, request.furynd_node, "ceth")
 logging.info(f"created account for key {credentials.from_key}")

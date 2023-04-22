@@ -2,7 +2,7 @@
 
 set -x
 
-# furynoded tx tokenregistry register denoms/stake.json \
+# furynd tx tokenregistry register denoms/stake.json \
 #   --node ${FURYNODE_NODE} \
 #   --chain-id "${FURYNODE_CHAIN_ID}" \
 #   --from "${ADMIN_ADDRESS}" \
@@ -12,7 +12,7 @@ set -x
 #   -y \
 #   --broadcast-mode block
 
-furynoded tx tokenregistry register denoms/fury.json \
+furynd tx tokenregistry register denoms/fury.json \
   --node ${FURYNODE_NODE} \
   --chain-id "${FURYNODE_CHAIN_ID}" \
   --from "${ADMIN_ADDRESS}" \
@@ -22,7 +22,7 @@ furynoded tx tokenregistry register denoms/fury.json \
   -y \
   --broadcast-mode block
 
-furynoded tx tokenregistry register denoms/cusdc.json \
+furynd tx tokenregistry register denoms/cusdc.json \
   --node ${FURYNODE_NODE} \
   --chain-id "${FURYNODE_CHAIN_ID}" \
   --from "${ADMIN_ADDRESS}" \
@@ -32,7 +32,7 @@ furynoded tx tokenregistry register denoms/cusdc.json \
   -y \
   --broadcast-mode block
 
-# furynoded tx tokenregistry register denoms/ceth.json \
+# furynd tx tokenregistry register denoms/ceth.json \
 #   --node ${FURYNODE_NODE} \
 #   --chain-id "${FURYNODE_CHAIN_ID}" \
 #   --from "${ADMIN_ADDRESS}" \
@@ -42,7 +42,7 @@ furynoded tx tokenregistry register denoms/cusdc.json \
 #   -y \
 #   --broadcast-mode block
 
-# furynoded tx tokenregistry register denoms/cwbtc.json \
+# furynd tx tokenregistry register denoms/cwbtc.json \
 #   --node ${FURYNODE_NODE} \
 #   --chain-id "${FURYNODE_CHAIN_ID}" \
 #   --from "${ADMIN_ADDRESS}" \
@@ -52,7 +52,7 @@ furynoded tx tokenregistry register denoms/cusdc.json \
 #   -y \
 #   --broadcast-mode block
 
-# furynoded tx tokenregistry register denoms/uatom.json \
+# furynd tx tokenregistry register denoms/uatom.json \
 #   --node ${FURYNODE_NODE} \
 #   --chain-id "${FURYNODE_CHAIN_ID}" \
 #   --from "${ADMIN_ADDRESS}" \

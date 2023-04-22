@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-furynoded tx clp set-lppd-params --path=./data/lpd_params.json \
+furynd tx clp set-lppd-params --path=./data/lpd_params.json \
 	--from $ADMIN_KEY \
 	--gas=500000 \
 	--gas-prices=0.5fury \

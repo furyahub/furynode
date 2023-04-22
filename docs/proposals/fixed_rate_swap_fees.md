@@ -52,7 +52,7 @@ CLI options for setting and querying the swap fee rate must be implemented.
 The CLI should validate that the value of the swap rate fee satisfies `0 =< f =< 1`
 
 ```bash
-furynoded tx clp set-swap-fee-rate \
+furynd tx clp set-swap-fee-rate \
   --from fury \
   --swapFeeRate 0.01 \
   --keyring-backend test \
@@ -64,7 +64,7 @@ furynoded tx clp set-swap-fee-rate \
 ### Querying
 
 ```bash
-furynoded q clp swap-fee-rate --output json
+furynd q clp swap-fee-rate --output json
 ```
 
 ```json

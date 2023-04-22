@@ -74,16 +74,16 @@ There are no new events or updates to existing events.
 
 ## CLI
 
-The CLI option for querying the swap fee rate (`furynoded q clp swap-fee-rate`) and setting the swap fee
-rate (`furynoded tx clp set-swap-fee-rate`), must be renamed to `furynoded q clp swap-fee-params`
-and `furynoded tx clp set-swap-fee-params` and updated to include the min fee.
+The CLI option for querying the swap fee rate (`furynd q clp swap-fee-rate`) and setting the swap fee
+rate (`furynd tx clp set-swap-fee-rate`), must be renamed to `furynd q clp swap-fee-params`
+and `furynd tx clp set-swap-fee-params` and updated to include the min fee.
 
 ### Setting
 
 The CLI should validate that the min fees are valid cosmos Uint256.
 
 ```bash
-furynoded tx clp set-swap-fee-params \
+furynd tx clp set-swap-fee-params \
   --from fury \
   --path ./swap-fee-params.json \
   --keyring-backend test \
@@ -114,7 +114,7 @@ furynoded tx clp set-swap-fee-params \
 ### Querying
 
 ```bash
-furynoded q clp swap-fee-params --output json
+furynd q clp swap-fee-params --output json
 ```
 
 ```json

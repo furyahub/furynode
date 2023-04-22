@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Unbond liquidity
-furynoded tx clp unbond-liquidity \
+furynd tx clp unbond-liquidity \
 --from fury --keyring-backend test \
 --fees 100000000000000000fury \
 --symbol ceth \

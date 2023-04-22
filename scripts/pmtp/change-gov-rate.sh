@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp pmtp-params \
+furynd tx clp pmtp-params \
   --rGov=0.02 \
   --from=$FURY_ACT \
   --keyring-backend=test \

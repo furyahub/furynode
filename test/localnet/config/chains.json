@@ -1,7 +1,7 @@
 {
   "furynet": {
-    "binary": "furynoded",
-    "binaryUrl": "https://github.com/Furynet/furynode/releases/download/betanet-0.9.10/furynoded-betanet-0.9.10-linux-amd64.zip",
+    "binary": "furynd",
+    "binaryUrl": "https://github.com/Furynet/furynode/releases/download/betanet-0.9.10/furynd-betanet-0.9.10-linux-amd64.zip",
     "denom": "fury",
     "prefix": "fury",
     "fees": 100000,

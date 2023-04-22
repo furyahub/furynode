@@ -11,12 +11,12 @@ from furytool import command, cosmos, project, environments, furynet
 # How to use:
 # Install Python 3.8-3.10
 # Run test/integration/framework/furytool venv
-# Prepare furynoded binaries
-# - Compile furynoded binary for v0.14.0 and put them into test/integration/framework/build/versions/0.14.0/furynoded
-# - Compile furynoded binary for v0.15.0-rc.1 and put them into test/integration/framework/build/versions/0.15.0-rc.1/furynoded
+# Prepare furynd binaries
+# - Compile furynd binary for v0.14.0 and put them into test/integration/framework/build/versions/0.14.0/furynd
+# - Compile furynd binary for v0.15.0-rc.1 and put them into test/integration/framework/build/versions/0.15.0-rc.1/furynd
 # - For exact versions se OLD_VERSION and NEW_VERSION above
 # Run test/integration/framework/venv/bin/python3 test/integration/src/features/test_min_commission.py
-# To watch live logs: tail -F /tmp/furytool.tmp/test_min_commission/furynoded-0/furynoded.log
+# To watch live logs: tail -F /tmp/furytool.tmp/test_min_commission/furynd-0/furynd.log
 #
 # More information about min commission / max voting power:
 # Test scenarios (Kevin): https://github.com/Furynet/furynode/blob/feature/min-commission/docs/tutorials/commission.md
@@ -38,14 +38,14 @@ OLD_VERSION = "0.14.0"
 NEW_VERSION = "0.15.0-rc.2"
 
 
-# Kill off any furynoded processes running from before
+# Kill off any furynd processes running from before
 def pkill(cmd):
     project.Project(cmd, project_dir()).pkill()
     time.sleep(2)
 
 
 def get_binary_for_version(label):
-    return project_dir("test", "integration", "framework", "build", "versions", label, "furynoded")
+    return project_dir("test", "integration", "framework", "build", "versions", label, "furynd")
 
 
 def assert_no_exception(exception):
@@ -61,11 +61,11 @@ def create_environment(cmd, version, commission_rate=0.06, commission_max_rate=0
     cmd.mkdir(home_root)
 
     binary = get_binary_for_version(version)
-    assert furynet.Furynoded(cmd, binary=binary).version() == version  # Check actual version
+    assert furynet.Furynd(cmd, binary=binary).version() == version  # Check actual version
 
     pkill(cmd)
 
-    env = environments.FurynodedEnvironment(cmd, furynoded_home_root=home_root)
+    env = environments.FuryndEnvironment(cmd, furynd_home_root=home_root)
     env.staking_denom = STAKE
     env.add_validator(binary=binary, commission_rate=commission_rate, commission_max_rate=commission_max_rate,
         commission_max_change_rate=commission_max_change_rate, staking_amount=staking_amount)
@@ -76,12 +76,12 @@ def create_environment(cmd, version, commission_rate=0.06, commission_max_rate=0
 def delegate(env, from_index, to_index, amount):
     from_validator_node_info = env.node_info[from_index]
     to_validator_node_info = env.node_info[to_index]
-    furynoded_to = env._furynoded_for(to_validator_node_info)
-    furynoded_from_to = env._furynoded_for(from_validator_node_info, to_node_info=to_validator_node_info)
-    validator_addr = furynoded_to.get_val_address(to_validator_node_info["admin_addr"])
+    furynd_to = env._furynd_for(to_validator_node_info)
+    furynd_from_to = env._furynd_for(from_validator_node_info, to_node_info=to_validator_node_info)
+    validator_addr = furynd_to.get_val_address(to_validator_node_info["admin_addr"])
     from_addr = from_validator_node_info["admin_addr"]
     env.fund(from_addr, {env.staking_denom: amount})  # Make sure admin has enough balance for what he is delegating
-    res = furynoded_from_to.staking_delegate(validator_addr, {env.staking_denom: amount}, from_addr, broadcast_mode="block")
+    res = furynd_from_to.staking_delegate(validator_addr, {env.staking_denom: amount}, from_addr, broadcast_mode="block")
     furynet.check_raw_log(res)
 
 
@@ -112,14 +112,14 @@ def test_min_commission_modify_existing_validator_24h(cmd: command.Command):
     env.add_validator()
     env.add_validator()
 
-    furynoded0 = env._furynoded_for(env.node_info[0])
+    furynd0 = env._furynd_for(env.node_info[0])
     admin0_addr = env.node_info[0]["admin_addr"]
-    furynoded1 = env._furynoded_for(env.node_info[1])
+    furynd1 = env._furynd_for(env.node_info[1])
     admin1_addr = env.node_info[1]["admin_addr"]
-    furynoded2 = env._furynoded_for(env.node_info[2])
+    furynd2 = env._furynd_for(env.node_info[2])
     admin2_addr = env.node_info[2]["admin_addr"]
 
-    validators = furynoded0.query_staking_validators()
+    validators = furynd0.query_staking_validators()
     assert all(float(v["commission"]["commission_rates"]["rate"]) == 0.06 for v in validators)
     assert all(float(v["commission"]["commission_rates"]["max_rate"]) == 0.10 for v in validators)
     assert all(float(v["commission"]["commission_rates"]["max_change_rate"]) == 0.05 for v in validators)
@@ -131,7 +131,7 @@ def test_min_commission_modify_existing_validator_24h(cmd: command.Command):
 
     exception = None
     try:
-        res = furynoded0.staking_edit_validator(0.05, from_acct=admin0_addr, broadcast_mode="block")
+        res = furynd0.staking_edit_validator(0.05, from_acct=admin0_addr, broadcast_mode="block")
         furynet.check_raw_log(res)
     except Exception as e:
         exception = e
@@ -139,7 +139,7 @@ def test_min_commission_modify_existing_validator_24h(cmd: command.Command):
 
     exception = None
     try:
-        res = furynoded1.staking_edit_validator(0.03, from_acct=admin1_addr, broadcast_mode="block")
+        res = furynd1.staking_edit_validator(0.03, from_acct=admin1_addr, broadcast_mode="block")
         furynet.check_raw_log(res)
     except Exception as e:
         exception = e
@@ -147,7 +147,7 @@ def test_min_commission_modify_existing_validator_24h(cmd: command.Command):
 
     exception = None
     try:
-        res = furynoded2.staking_edit_validator(0.07, from_acct=admin2_addr, broadcast_mode="block")
+        res = furynd2.staking_edit_validator(0.07, from_acct=admin2_addr, broadcast_mode="block")
         furynet.check_raw_log(res)
     except Exception as e:
         exception = e
@@ -167,24 +167,24 @@ def test_min_commission_upgrade_handler(cmd: command.Command):
         if should_succeed:
             assert_no_exception(exception)
         else:
-            # TODO In case of invalid validator setup (commission_rate > commission_max_rate) furynoded does not start
+            # TODO In case of invalid validator setup (commission_rate > commission_max_rate) furynd does not start
             #      and we get a timeout. We don't check the exception here, but we assume that this is what happened
             #      since other scenarios are working which only differ in parameters.
             return
 
-        furynoded = env._furynoded_for(env.node_info[0])
-        upgrade_height = furynoded.get_current_block() + 15  # 15 * 5 = 75s > 60s
+        furynd = env._furynd_for(env.node_info[0])
+        upgrade_height = furynd.get_current_block() + 15  # 15 * 5 = 75s > 60s
 
-        commission_rates_before = exactly_one(furynoded.query_staking_validators())["commission"]["commission_rates"]
+        commission_rates_before = exactly_one(furynd.query_staking_validators())["commission"]["commission_rates"]
         assert float(commission_rates_before["rate"]) == pre_upgrade_commission_rate
         assert float(commission_rates_before["max_rate"]) == pre_upgrade_commission_max_rate
         assert float(commission_rates_before["max_change_rate"]) == 0.01
 
         env.upgrade(NEW_VERSION, get_binary_for_version(NEW_VERSION), upgrade_height)
 
-        furynoded = env._furynoded_for(env.node_info[0])
+        furynd = env._furynd_for(env.node_info[0])
 
-        commission_rates_after = exactly_one(furynoded.query_staking_validators())["commission"]["commission_rates"]
+        commission_rates_after = exactly_one(furynd.query_staking_validators())["commission"]["commission_rates"]
         assert float(commission_rates_after["rate"]) == expected_commission_rate
         assert float(commission_rates_after["max_rate"]) == expected_commission_max_rate
         assert float(commission_rates_after["max_change_rate"]) == 0.01
@@ -202,9 +202,9 @@ def test_max_voting_power(cmd: command.Command):
         env = create_environment(cmd, NEW_VERSION, staking_amount=1000 * 10**21)
         env.add_validator(staking_amount=62 * 10**21)
         env.start()
-        furynoded = env._furynoded_for(env.node_info[0])
+        furynd = env._furynd_for(env.node_info[0])
 
-        validator_powers_before = [int(x["tokens"]) for x in furynoded.query_staking_validators()]
+        validator_powers_before = [int(x["tokens"]) for x in furynd.query_staking_validators()]
 
         exception = None
         try:
@@ -213,12 +213,12 @@ def test_max_voting_power(cmd: command.Command):
         except Exception as e:
             exception = e
 
-        validator_powers_after = [int(x["tokens"]) for x in furynoded.query_staking_validators()]
+        validator_powers_after = [int(x["tokens"]) for x in furynd.query_staking_validators()]
 
         if should_succeed:
             assert_no_exception(exception)
             # Check actual vs. expected validator powers.
-            # Note: this assertion might fail if "furynoded query staking validators" returns a list in different order.
+            # Note: this assertion might fail if "furynd query staking validators" returns a list in different order.
             expected_validator_powers_after = validator_powers_before
             expected_validator_powers_after[to_validator_index] += amount
             assert validator_powers_after == expected_validator_powers_after

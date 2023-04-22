@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp unbond-liquidity \
+furynd tx clp unbond-liquidity \
   --from $FURY_ACT \
   --keyring-backend test \
   --symbol cusdt \

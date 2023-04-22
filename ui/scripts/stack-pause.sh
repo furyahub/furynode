@@ -1,4 +1,4 @@
 #!/bin/bash
 
-killall furynoded furynoded ebrelayer ganache-cli
+killall furynd furynd ebrelayer ganache-cli
 sleep 10

@@ -32,7 +32,7 @@ At the same time providing a continous funding interest rate to the CLP provider
 
 2. Decrease the gouvernance voting period time;
 ```bash
-echo "$(jq '.app_state.gov.voting_params.voting_period = "60s"' $HOME/.furynoded/config/genesis.json)" > $HOME/.furynoded/config/genesis.json
+echo "$(jq '.app_state.gov.voting_params.voting_period = "60s"' $HOME/.furynd/config/genesis.json)" > $HOME/.furynd/config/genesis.json
 ```
 
 3. Start the chain;
@@ -42,7 +42,7 @@ echo "$(jq '.app_state.gov.voting_params.voting_period = "60s"' $HOME/.furynoded
 
 4. Check to see you have two local accounts/keys setup;
 ```bash
-furynoded keys list --keyring-backend=test
+furynd keys list --keyring-backend=test
 ```
 
 Result:
@@ -66,10 +66,10 @@ Result:
 
 5. Check your seed account balance/s;
 ```bash
-furynoded q bank balances $(furynoded keys show fury -a --keyring-backend=test)
+furynd q bank balances $(furynd keys show fury -a --keyring-backend=test)
 ```
 ```bash
-furynoded q bank balances $(furynoded keys show akasha -a --keyring-backend=test)
+furynd q bank balances $(furynd keys show akasha -a --keyring-backend=test)
 ```
 
 #### Create and query pools
@@ -81,7 +81,7 @@ note:
 
 1. Create the first pool for ceth;
 ```bash
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from fury \
   --keyring-backend test \
   --symbol ceth \
@@ -94,7 +94,7 @@ furynoded tx clp create-pool \
 
 2. Create another pool for cdash with a different account;
 ```bash
-furynoded tx clp create-pool \
+furynd tx clp create-pool \
   --from akasha \
   --keyring-backend test \
   --symbol cdash \
@@ -107,7 +107,7 @@ furynoded tx clp create-pool \
 
 3. Query all clp pools;
 ```bash
-furynoded q clp pools
+furynd q clp pools
 ```
 
 #### Enable margin on pools
@@ -135,17 +135,17 @@ The param change proposal takes the format:
 
 2. Submit a param change proposal;
 ```bash
-furynoded tx gov submit-proposal param-change proposal.json --from fury --keyring-backend test --chain-id localnet -y
+furynd tx gov submit-proposal param-change proposal.json --from fury --keyring-backend test --chain-id localnet -y
 ```
 
 3. Vote on proposal;
 ```bash
-furynoded tx gov vote 1 yes --from fury --chain-id localnet --keyring-backend test -y
+furynd tx gov vote 1 yes --from fury --chain-id localnet --keyring-backend test -y
 ```
 
 4. Query the proposal to check the proposal status has passed;
 ```bash
-furynoded q gov proposals --chain-id localnet
+furynd q gov proposals --chain-id localnet
 ```
 
 Result:
@@ -184,7 +184,7 @@ proposals:
 
 5. Verify that the margin param has changed;
 ```bash
-furynoded q params subspace margin Pools --chain-id localnet
+furynd q params subspace margin Pools --chain-id localnet
 ```
 
 Result:
@@ -198,7 +198,7 @@ value: '["ceth","cdash"]'
 
 1. Create margin long position against ceth;
 ```bash
-furynoded tx margin open \
+furynd tx margin open \
   --from fury \
   --keyring-backend test \
   --borrow_asset ceth \
@@ -227,7 +227,7 @@ txhash: 08CF11E1DECB1FF9340933D2D178DC6EBE2EE7114825FA2955C54972845C6E59
 
 2. Add up to an existing margin position by creating a second margin position for the same asset ceth;
 ```bash
-furynoded tx margin open \
+furynd tx margin open \
   --from fury \
   --keyring-backend test \
   --borrow_asset ceth \
@@ -256,7 +256,7 @@ txhash: 97E7A90E3DB3956101F8C226AC8F369F7C403956C84A4830103EAB3A286701B6
 
 3. Query all the existing margin positions (same asset ceth);
 ```bash
-furynoded q margin positions-for-address $(furynoded keys show fury -a --keyring-backend=test)
+furynd q margin positions-for-address $(furynd keys show fury -a --keyring-backend=test)
 ```
 
 Result:
@@ -290,7 +290,7 @@ mtps:
 
 1. Reduce the size of an existing margin position for ceth by closing one of the existing MTPs;
 ```bash
-furynoded tx margin close \
+furynd tx margin close \
   --from fury \
   --keyring-backend test \
   --id 2 \
@@ -316,7 +316,7 @@ txhash: 083CCA8E8C0E6E60A83A53764CD15031F1794AE79A00D6CD1F9E60E43601A39C
 
 2. Query remaining margin positions for ceth;
 ```bash
-furynoded q margin positions-for-address $(furynoded keys show fury -a --keyring-backend=test)
+furynd q margin positions-for-address $(furynd keys show fury -a --keyring-backend=test)
 ```
 
 Result:
@@ -337,7 +337,7 @@ mtps:
 
 3. Close the margin long position entirely for ceth;
 ```bash
-furynoded tx margin close \
+furynd tx margin close \
   --from fury \
   --keyring-backend test \
   --id 1 \
@@ -363,7 +363,7 @@ txhash: 110C1CF8DDE40A1554D500AE584CBF8875209908A8D7792256EF9486B2F84B70
 
 4. Query existing margin positions (none);
 ```bash
-furynoded q margin positions-for-address $(furynoded keys show fury -a --keyring-backend=test)
+furynd q margin positions-for-address $(furynd keys show fury -a --keyring-backend=test)
 ```
 
 Result:

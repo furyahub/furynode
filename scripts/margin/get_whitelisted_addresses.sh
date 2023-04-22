@@ -2,6 +2,6 @@
 
 set -x
 
-furynoded q margin whitelist \
+furynd q margin whitelist \
   --node ${FURYNODE_NODE} \
   --chain-id $FURYNODE_CHAIN_ID

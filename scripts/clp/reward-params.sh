@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx clp reward-params \
+furynd tx clp reward-params \
   --lockPeriod 0 \
   --cancelPeriod 0 \
   --from $FURY_ACT \

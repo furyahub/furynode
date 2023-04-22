@@ -2,7 +2,7 @@
 
 set -x
 
-ACCOUNT_NUMBER=$(furynoded q auth account $ADMIN_ADDRESS \
+ACCOUNT_NUMBER=$(furynd q auth account $ADMIN_ADDRESS \
     --node ${FURYNODE_NODE} \
     --chain-id $FURYNODE_CHAIN_ID \
     --output json \
@@ -10,12 +10,12 @@ ACCOUNT_NUMBER=$(furynoded q auth account $ADMIN_ADDRESS \
 
 for i in {0..1}; do
   echo "tx ${i}"
-  SEQUENCE=$(furynoded q auth account $ADMIN_ADDRESS \
+  SEQUENCE=$(furynd q auth account $ADMIN_ADDRESS \
     --node ${FURYNODE_NODE} \
     --chain-id $FURYNODE_CHAIN_ID \
     --output json \
     | jq -r ".sequence")
-  furynoded tx clp swap \
+  furynd tx clp swap \
     --from=$FURY_ACT \
     --keyring-backend=test \
     --sentSymbol=ibc/27394FB092D2ECCD56123C74F36E4C1F926001CEADA9CA97EA622B25F41E5EB2 \

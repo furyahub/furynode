@@ -25,7 +25,7 @@ When used with the use of peg-zone as demonstrated a past video, this will enabl
 
 2. Start the chain; `./scripts/run.sh`
 
-3. Check to see you have two local accounts/keys setup; `furynoded keys list --keyring-backend=test`
+3. Check to see you have two local accounts/keys setup; `furynd keys list --keyring-backend=test`
 
 ```
 - name: akasha
@@ -47,9 +47,9 @@ When used with the use of peg-zone as demonstrated a past video, this will enabl
 
 4. Check your seed account balance/s;
 
-   `furynoded q bank balances $(furynoded keys show fury -a --keyring-backend=test)`
+   `furynd q bank balances $(furynd keys show fury -a --keyring-backend=test)`
    
-   `furynoded q bank balances $(furynoded keys show akasha -a --keyring-backend=test)`
+   `furynd q bank balances $(furynd keys show akasha -a --keyring-backend=test)`
 
 #### Create and query pools
 
@@ -58,36 +58,36 @@ note:
 * the minimum transaction fee for these operations is 10^17 fury.
 
 1. Create the first pool for ceth; 
-`furynoded tx clp create-pool --from fury --keyring-backend test --symbol ceth --nativeAmount 2000000000000000000 --externalAmount 2000000000000000000 --fees 100000000000000000fury --chain-id localnet -y`
+`furynd tx clp create-pool --from fury --keyring-backend test --symbol ceth --nativeAmount 2000000000000000000 --externalAmount 2000000000000000000 --fees 100000000000000000fury --chain-id localnet -y`
 
 2. Create another pool for cdash with a different account; 
-`furynoded tx clp create-pool --from akasha --keyring-backend test --symbol cdash --nativeAmount 3000000000000000000 --externalAmount 3000000000000000000 --fees 100000000000000000fury --chain-id localnet -y`
+`furynd tx clp create-pool --from akasha --keyring-backend test --symbol cdash --nativeAmount 3000000000000000000 --externalAmount 3000000000000000000 --fees 100000000000000000fury --chain-id localnet -y`
 
-3. Check funds left on first account; `furynoded q bank balances $(furynoded keys show fury -a --keyring-backend=test)`
+3. Check funds left on first account; `furynd q bank balances $(furynd keys show fury -a --keyring-backend=test)`
 
-4. Check funds left on second account; `furynoded q bank balances $(furynoded keys show akasha -a --keyring-backend=test)`
+4. Check funds left on second account; `furynd q bank balances $(furynd keys show akasha -a --keyring-backend=test)`
 
-5. Query all clp pools; `furynoded q clp pools`
+5. Query all clp pools; `furynd q clp pools`
 
-6. Query the ceth pool; `furynoded q clp pool ceth`
+6. Query the ceth pool; `furynd q clp pool ceth`
 
-7. Query an accounts liquidity provider `furynoded q clp lp ceth $(furynoded keys show fury -a --keyring-backend=test)`
+7. Query an accounts liquidity provider `furynd q clp lp ceth $(furynd keys show fury -a --keyring-backend=test)`
 
 #### Add Extra liquidity  (Continuing from above)
 
 1. Add more liquidity for ceth from fury account; 
-`furynoded tx clp add-liquidity --from fury  --keyring-backend test --symbol ceth --nativeAmount 1000000000000000000 --externalAmount 1000000000000000000 --fees 100000000000000000fury --chain-id localnet -y`
+`furynd tx clp add-liquidity --from fury  --keyring-backend test --symbol ceth --nativeAmount 1000000000000000000 --externalAmount 1000000000000000000 --fees 100000000000000000fury --chain-id localnet -y`
 
 2. Add more liquidity for cdash from other account; 
-`furynoded tx clp add-liquidity --from akasha  --keyring-backend test --symbol cdash --nativeAmount 1000000000000000000 --externalAmount 1000000000000000000  --fees 100000000000000000fury --chain-id localnet -y`
+`furynd tx clp add-liquidity --from akasha  --keyring-backend test --symbol cdash --nativeAmount 1000000000000000000 --externalAmount 1000000000000000000  --fees 100000000000000000fury --chain-id localnet -y`
 
 #### Swap via the pools 
 
 1. Swap some ceth for cdash via the fury key/account; 
-`furynoded tx clp swap --from fury --keyring-backend test --sentSymbol ceth --receivedSymbol cdash --sentAmount 200 --minReceivingAmount 0 --fees 100000000000000000fury --chain-id localnet -y`
+`furynd tx clp swap --from fury --keyring-backend test --sentSymbol ceth --receivedSymbol cdash --sentAmount 200 --minReceivingAmount 0 --fees 100000000000000000fury --chain-id localnet -y`
 
 2. Swap some cdash for ceth via the akasha key/account;
-`furynoded tx clp swap --from akasha --keyring-backend test --sentSymbol cdash --receivedSymbol ceth --sentAmount 222 --minReceivingAmount 0 --fees 100000000000000000fury --chain-id localnet -y`
+`furynd tx clp swap --from akasha --keyring-backend test --sentSymbol cdash --receivedSymbol ceth --sentAmount 222 --minReceivingAmount 0 --fees 100000000000000000fury --chain-id localnet -y`
 
 #### Removing liquidity (Continuing from above)
 
@@ -100,10 +100,10 @@ note:
 E.g
 
 1. Remove 50% of fury's liquidity in fury/ceth symmetrically (equal fury/ceth); 
-`furynoded tx clp remove-liquidity --from fury --keyring-backend test --symbol ceth --wBasis 5000 --asymmetry 0 --fees 100000000000000000fury --chain-id localnet -y`
+`furynd tx clp remove-liquidity --from fury --keyring-backend test --symbol ceth --wBasis 5000 --asymmetry 0 --fees 100000000000000000fury --chain-id localnet -y`
 
 2. Remove 10% of akasha's liquidity in fury/dash symmetrically (equal fury/dash);
-`furynoded tx clp remove-liquidity --from akasha --keyring-backend test --symbol cdash --wBasis 1000 --asymmetry 0 --fees 100000000000000000fury --chain-id localnet -y`
+`furynd tx clp remove-liquidity --from akasha --keyring-backend test --symbol cdash --wBasis 1000 --asymmetry 0 --fees 100000000000000000fury --chain-id localnet -y`
 
 #### Coming  
 

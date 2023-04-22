@@ -2,7 +2,7 @@
 
 set -x
 
-furynoded tx gov submit-proposal \
+furynd tx gov submit-proposal \
     param-change proposal.json \
     --from $FURY_ACT \
     --keyring-backend test \

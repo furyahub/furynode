@@ -1,9 +1,9 @@
 #!/bin/bash
 
-killall furynoded
+killall furynd
 
-rm $(which furynoded) 2> /dev/null || echo furynoded not install yet ...
+rm $(which furynd) 2> /dev/null || echo furynd not install yet ...
 
-rm -rf ~/.furynoded
+rm -rf ~/.furynd
 
 cd ../../../ && make install 
