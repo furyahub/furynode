@@ -1,0 +1,20 @@
+=============== Jun 26, 2021 (AEST) ===============
+12:29:48.926339 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+12:29:48.927751 db@open opening
+12:29:48.927879 version@stat F·[] S·0B[] Sc·[]
+12:29:48.928563 db@janitor F·2 G·0
+12:29:48.928582 db@open done T·822.319µs
+12:30:19.851608 db@close closing
+12:30:19.851693 db@close done T·82.132µs
+=============== Apr 20, 2023 (IST) ===============
+10:55:45.571469 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+10:55:45.571835 version@stat F·[] S·0B[] Sc·[]
+10:55:45.571853 db@open opening
+10:55:45.571891 journal@recovery F·1
+10:55:45.572645 journal@recovery recovering @1
+10:55:45.579489 memdb@flush created L0@2 N·5 S·176B "cos..ock,v5":"cos..ock,v1"
+10:55:45.579853 version@stat F·[1] S·176B[176B] Sc·[0.25]
+10:55:45.603565 db@janitor F·3 G·0
+10:55:45.603793 db@open done T·31.930583ms
+10:56:07.239501 db@close closing
+10:56:07.239715 db@close done T·214.125µs

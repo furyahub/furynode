@@ -1,0 +1,4 @@
+/venv/
+/build/
+/src/furytool/__pycache__/
+/.lock
